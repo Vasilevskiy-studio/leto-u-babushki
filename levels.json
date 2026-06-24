@@ -1,0 +1,291 @@
+{
+  "levels": [
+    {
+      "id": 1,
+      "timer": 420,
+      "items": ["pech", "holodilnik", "okno", "drova", "kover"]
+    },
+    {
+      "id": 2,
+      "timer": 400,
+      "items": ["skaterti", "batareja", "stul", "zanavestka", "korzina"]
+    },
+    {
+      "id": 3,
+      "timer": 360,
+      "items": ["samovar", "radio", "tsvetok", "kuvsheen", "yabloki"]
+    },
+    {
+      "id": 4,
+      "timer": 330,
+      "items": ["hleb", "miska", "varene", "ogurtsy", "kastrulya"]
+    },
+    {
+      "id": 5,
+      "timer": 300,
+      "items": ["pech", "holodilnik", "samovar", "yabloki", "kuvsheen", "radio"]
+    },
+    {
+      "id": 6,
+      "timer": 270,
+      "items": ["polotentse", "yaytsa", "lozhka", "stul", "varene", "zanavestka"]
+    },
+    {
+      "id": 7,
+      "timer": 240,
+      "items": ["retsept", "protiven", "posuda", "luk", "hleb", "batareja"]
+    },
+    {
+      "id": 8,
+      "timer": 210,
+      "items": ["polotentse", "lozhka", "yaytsa", "ogurtsy", "skaterti", "kover"]
+    },
+    {
+      "id": 9,
+      "timer": 180,
+      "items": ["retsept", "protiven", "posuda", "luk", "polotentse", "lozhka", "yaytsa"]
+    },
+    {
+      "id": 10,
+      "timer": 150,
+      "items": ["luk", "retsept", "protiven", "posuda", "polotentse", "lozhka", "miska"]
+    }
+  ],
+  "items": [
+    {
+      "id": "pech",
+      "name": "Печь",
+      "zones": [{"x": 0.067, "y": 0.480, "radius": 0.30}]
+    },
+    {
+      "id": "holodilnik",
+      "name": "Холодильник",
+      "zones": [{"x": 0.813, "y": 0.620, "radius": 0.225}]
+    },
+    {
+      "id": "okno",
+      "name": "Окно",
+      "zones": [{"x": 0.742, "y": 0.260, "radius": 0.16}]
+    },
+    {
+      "id": "drova",
+      "name": "Поленница дров",
+      "zones": [{"x": 0.076, "y": 0.754, "radius": 0.07}]
+    },
+    {
+      "id": "kover",
+      "name": "Ковёр",
+      "zones": [
+        {"x": 0.278, "y": 0.861, "radius": 0.06},
+        {"x": 0.706, "y": 0.858, "radius": 0.06}
+      ]
+    },
+    {
+      "id": "skaterti",
+      "name": "Скатерть",
+      "zones": [
+        {"x": 0.509, "y": 0.932, "radius": 0.06},
+        {"x": 0.402, "y": 0.900, "radius": 0.06}
+      ]
+    },
+    {
+      "id": "batareja",
+      "name": "Батарея",
+      "zones": [{"x": 0.701, "y": 0.616, "radius": 0.05}]
+    },
+    {
+      "id": "stul",
+      "name": "Стул",
+      "zones": [{"x": 0.644, "y": 0.578, "radius": 0.05}]
+    },
+    {
+      "id": "zanavestka",
+      "name": "Занавеска",
+      "zones": [
+        {"x": 0.666, "y": 0.203, "radius": 0.04},
+        {"x": 0.809, "y": 0.143, "radius": 0.04}
+      ]
+    },
+    {
+      "id": "korzina",
+      "name": "Плетёная корзина",
+      "zones": [
+        {"x": 0.234, "y": 0.719, "radius": 0.05},
+        {"x": 0.946, "y": 0.969, "radius": 0.05}
+      ]
+    },
+    {
+      "id": "samovar",
+      "name": "Самовар",
+      "zones": [{"x": 0.844, "y": 0.254, "radius": 0.05}]
+    },
+    {
+      "id": "radio",
+      "name": "Радиоприёмник",
+      "zones": [{"x": 0.922, "y": 0.364, "radius": 0.04}]
+    },
+    {
+      "id": "tsvetok",
+      "name": "Цветок в горшке",
+      "zones": [{"x": 0.681, "y": 0.418, "radius": 0.04}]
+    },
+    {
+      "id": "kuvsheen",
+      "name": "Кувшин",
+      "zones": [{"x": 0.423, "y": 0.685, "radius": 0.04}]
+    },
+    {
+      "id": "yabloki",
+      "name": "Яблоки",
+      "zones": [{"x": 0.496, "y": 0.646, "radius": 0.05}]
+    },
+    {
+      "id": "hleb",
+      "name": "Хлеб",
+      "zones": [{"x": 0.638, "y": 0.696, "radius": 0.04}]
+    },
+    {
+      "id": "miska",
+      "name": "Миска с салатом",
+      "zones": [{"x": 0.548, "y": 0.408, "radius": 0.04}]
+    },
+    {
+      "id": "varene",
+      "name": "Банка варенья",
+      "zones": [{"x": 0.619, "y": 0.790, "radius": 0.03}]
+    },
+    {
+      "id": "ogurtsy",
+      "name": "Банка огурцов",
+      "zones": [{"x": 0.562, "y": 0.690, "radius": 0.03}]
+    },
+    {
+      "id": "kastrulya",
+      "name": "Кастрюля",
+      "zones": [
+        {"x": 0.449, "y": 0.543, "radius": 0.04},
+        {"x": 0.505, "y": 0.531, "radius": 0.04},
+        {"x": 0.508, "y": 0.594, "radius": 0.04}
+      ]
+    },
+    {
+      "id": "polotentse",
+      "name": "Полотенце",
+      "zones": [{"x": 0.233, "y": 0.344, "radius": 0.04}]
+    },
+    {
+      "id": "yaytsa",
+      "name": "Яйца",
+      "zones": [{"x": 0.539, "y": 0.770, "radius": 0.04}]
+    },
+    {
+      "id": "lozhka",
+      "name": "Ложка",
+      "zones": [{"x": 0.510, "y": 0.315, "radius": 0.03}]
+    },
+    {
+      "id": "retsept",
+      "name": "Рецепт",
+      "zones": [{"x": 0.632, "y": 0.186, "radius": 0.03}]
+    },
+    {
+      "id": "protiven",
+      "name": "Противень",
+      "zones": [{"x": 0.060, "y": 0.903, "radius": 0.06}]
+    },
+    {
+      "id": "posuda",
+      "name": "Фарфоровая тарелка",
+      "zones": [
+        {"x": 0.324, "y": 0.351, "radius": 0.06},
+        {"x": 0.367, "y": 0.339, "radius": 0.06},
+        {"x": 0.323, "y": 0.212, "radius": 0.06},
+        {"x": 0.368, "y": 0.216, "radius": 0.06},
+        {"x": 0.325, "y": 0.096, "radius": 0.06},
+        {"x": 0.278, "y": 0.098, "radius": 0.06}
+      ]
+    },
+    {
+      "id": "luk",
+      "name": "Связка лука",
+      "zones": [
+        {"x": 0.052, "y": 0.058, "radius": 0.04},
+        {"x": 0.300, "y": 0.029, "radius": 0.04},
+        {"x": 0.399, "y": 0.048, "radius": 0.04},
+        {"x": 0.628, "y": 0.038, "radius": 0.04}
+      ]
+    }
+  ],
+  "bath_items": [
+    {"id": "pech_bath",       "name": "Печь",              "zones": [{"x": 0.06, "y": 0.25, "width": 0.18, "height": 0.55, "shape": "rect"}]},
+    {"id": "bochka",          "name": "Бочка с водой",     "zones": [{"x": 0.317, "y": 0.510, "radius": 0.20}]},
+    {"id": "vedro_bath",      "name": "Ведро",             "zones": [{"x": 0.322, "y": 0.733, "radius": 0.11}]},
+    {"id": "taz",             "name": "Таз",               "zones": [{"x": 0.523, "y": 0.460, "radius": 0.10}]},
+    {"id": "lavka",           "name": "Лавка",             "zones": [
+      {"x": 0.38, "y": 0.49, "width": 0.32, "height": 0.18, "shape": "rect", "rotation": 20},
+      {"x": 0.44, "y": 0.22, "width": 0.28, "height": 0.16, "shape": "rect", "rotation": 20}
+    ]},
+    {"id": "okno_bath",       "name": "Окно",              "zones": [{"x": 0.29, "y": 0.06, "width": 0.11, "square": true, "shape": "rect"}]},
+    {"id": "dver_bath",       "name": "Дверь",             "zones": [{"x": 0.83, "y": 0.10, "width": 0.17, "height": 0.60, "shape": "rect"}]},
+    {"id": "venik",           "name": "Веник дубовый",     "zones": [
+      {"x": 0.217, "y": 0.950, "radius": 0.08},
+      {"x": 0.578, "y": 0.221, "radius": 0.07},
+      {"x": 0.724, "y": 0.077, "radius": 0.06},
+      {"x": 0.670, "y": 0.091, "radius": 0.06}
+    ]},
+    {"id": "kvas",            "name": "Бутылка кваса",     "zones": [{"x": 0.295, "y": 0.175, "width": 0.04, "height": 0.12, "shape": "rect"}]},
+    {"id": "svecha",          "name": "Свеча",             "zones": [
+      {"x": 0.827, "y": 0.652, "radius": 0.03},
+      {"x": 0.333, "y": 0.221, "radius": 0.03}
+    ]},
+    {"id": "banka_trav",      "name": "Банка с травами",   "zones": [{"x": 0.727, "y": 0.610, "width": 0.06, "height": 0.15, "shape": "rect"}]},
+    {"id": "chasy_bath",      "name": "Часы",              "zones": [{"x": 0.415, "y": 0.215, "radius": 0.04}]},
+    {"id": "polotentse_bath", "name": "Полотенце",         "zones": [
+      {"x": 0.253, "y": 0.184, "radius": 0.07},
+      {"x": 0.685, "y": 0.324, "radius": 0.07},
+      {"x": 0.626, "y": 0.619, "radius": 0.07},
+      {"x": 0.461, "y": 0.936, "radius": 0.07}
+    ]},
+    {"id": "termometr",       "name": "Термометр",         "zones": [{"x": 0.210, "y": 0.095, "width": 0.025, "height": 0.10, "shape": "rect"}]},
+    {"id": "kovsh",           "name": "Ковш",              "zones": [
+      {"x": 0.458, "y": 0.405, "radius": 0.05},
+      {"x": 0.950, "y": 0.399, "radius": 0.05}
+    ]},
+    {"id": "mochalka",        "name": "Мочалка",           "zones": [{"x": 0.570, "y": 0.532, "radius": 0.04}]},
+    {"id": "nozhnicy",        "name": "Ножницы",           "zones": [{"x": 0.677, "y": 0.825, "radius": 0.03}]},
+    {"id": "rashoska",        "name": "Расчёска",          "zones": [{"x": 0.571, "y": 0.898, "radius": 0.03}]},
+    {"id": "pemza",           "name": "Пемза",             "zones": [{"x": 0.718, "y": 0.944, "radius": 0.04}]},
+    {"id": "meshok",          "name": "Мешочек с травами", "zones": [
+      {"x": 0.633, "y": 0.953, "radius": 0.03},
+      {"x": 0.628, "y": 0.843, "radius": 0.03},
+      {"x": 0.921, "y": 0.872, "radius": 0.03}
+    ]},
+    {"id": "spichki",         "name": "Спички",            "zones": [{"x": 0.892, "y": 0.971, "radius": 0.03}]},
+    {"id": "sol",             "name": "Соль",              "zones": [{"x": 0.800, "y": 0.908, "radius": 0.04}]},
+    {"id": "flacon",          "name": "Флакон масла",      "zones": [{"x": 0.867, "y": 0.855, "radius": 0.03}]},
+    {"id": "podushka",        "name": "Травяная подушка",  "zones": [{"x": 0.487, "y": 0.188, "radius": 0.04}]},
+    {"id": "sliv",            "name": "Слив",              "zones": [
+      {"x": 0.410, "y": 0.897, "radius": 0.03},
+      {"x": 0.344, "y": 0.960, "radius": 0.03}
+    ]},
+    {"id": "kamni",           "name": "Камни для печки",   "zones": [
+      {"x": 0.136, "y": 0.106, "radius": 0.04},
+      {"x": 0.062, "y": 0.139, "radius": 0.04},
+      {"x": 0.008, "y": 0.144, "radius": 0.04}
+    ]},
+    {"id": "mylo",            "name": "Мыло",              "zones": [{"x": 0.623, "y": 0.533, "radius": 0.03}]},
+    {"id": "banka_voda",      "name": "Банка с водой",     "zones": [{"x": 0.883, "y": 0.708, "radius": 0.04}]}
+  ],
+  "bath_levels": [
+    {"id": 101, "timer": 420, "items": ["pech_bath", "bochka", "okno_bath", "dver_bath", "vedro_bath"]},
+    {"id": 102, "timer": 400, "items": ["taz", "lavka", "venik", "polotentse_bath", "kvas"]},
+    {"id": 103, "timer": 360, "items": ["chasy_bath", "termometr", "kovsh", "mochalka", "banka_trav"]},
+    {"id": 104, "timer": 330, "items": ["svecha", "podushka", "kamni", "sliv", "banka_voda"]},
+    {"id": 105, "timer": 300, "items": ["pech_bath", "bochka", "venik", "kovsh", "chasy_bath", "polotentse_bath"]},
+    {"id": 106, "timer": 270, "items": ["mylo", "nozhnicy", "rashoska", "taz", "svecha", "kvas"]},
+    {"id": 107, "timer": 240, "items": ["pemza", "meshok", "spichki", "sol", "flacon", "termometr"]},
+    {"id": 108, "timer": 210, "items": ["mylo", "nozhnicy", "rashoska", "pemza", "banka_trav", "lavka"]},
+    {"id": 109, "timer": 180, "items": ["meshok", "spichki", "sol", "flacon", "mylo", "nozhnicy", "rashoska"]},
+    {"id": 110, "timer": 150, "items": ["pemza", "meshok", "spichki", "sol", "flacon", "termometr", "sliv"]}
+  ]
+}

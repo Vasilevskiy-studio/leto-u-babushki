@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem \"D:\\\\Лето у бабушки\\\\assets\")",
+      "Bash(Select-Object Name)",
+      "Bash(Sort-Object Name)",
+      "mcp__Claude_in_Chrome__list_connected_browsers",
+      "mcp__Claude_in_Chrome__select_browser",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__browser_batch",
+      "mcp__Claude_in_Chrome__read_console_messages",
+      "mcp__Claude_in_Chrome__read_network_requests",
+      "mcp__Claude_in_Chrome__computer",
+      "PowerShell(Get-ChildItem \"D:\\\\Лето у бабушки\\\\assets\\\\\" | Where-Object { $_.Name -match \"map_|btn_back|star_\" } | Select-Object Name)",
+      "Bash(tab_)",
+      "Bash(popup_bg\")",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\('D:\\\\Лето у бабушки\\\\assets\\\\cursor.png.png'\\); \"$\\($img.Width\\)x$\\($img.Height\\)\"; $img.Dispose\\(\\))",
+      "Bash(grep -n \"showMap\\\\|showStory\\\\|showScreen\\\\|startLevel\" \"D:/Лего у бабушки/game.js\" 2>/dev/null || grep -n \"showMap\\\\|showStory\\\\|showScreen\\\\|startLevel\" \"D:/Лето у бабушки/game.js\" | head -30)",
+      "Bash(git --version)"
+    ]
+  }
+}

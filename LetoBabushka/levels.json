@@ -1,0 +1,145 @@
+{
+  "locations": [
+    {
+      "id": "kitchen",
+      "name": "Кухня бабушки Гали",
+      "bg": "assets/kitchen_bg.jpg",
+      "icon": "🥧"
+    }
+  ],
+  "levels": [
+    {
+      "id": 1,
+      "location": "kitchen",
+      "title": "Уровень 1",
+      "items": [
+        { "id": "samovar",  "name": "Самовар",          "difficulty": "easy",   "x": 0.42, "y": 0.52, "radius": 0.065 },
+        { "id": "window",   "name": "Окно",              "difficulty": "easy",   "x": 0.50, "y": 0.13, "radius": 0.075 },
+        { "id": "oven",     "name": "Печь",              "difficulty": "easy",   "x": 0.14, "y": 0.55, "radius": 0.075 },
+        { "id": "flower",   "name": "Цветок в горшке",  "difficulty": "easy",   "x": 0.56, "y": 0.22, "radius": 0.055 },
+        { "id": "firewood", "name": "Поленница дров",   "difficulty": "easy",   "x": 0.09, "y": 0.78, "radius": 0.065 }
+      ]
+    },
+    {
+      "id": 2,
+      "location": "kitchen",
+      "title": "Уровень 2",
+      "items": [
+        { "id": "fridge",   "name": "Холодильник",      "difficulty": "easy",   "x": 0.88, "y": 0.44, "radius": 0.07  },
+        { "id": "radio",    "name": "Радио",             "difficulty": "easy",   "x": 0.78, "y": 0.26, "radius": 0.055 },
+        { "id": "table",    "name": "Стол",              "difficulty": "easy",   "x": 0.50, "y": 0.72, "radius": 0.075 },
+        { "id": "chair",    "name": "Стул",              "difficulty": "easy",   "x": 0.68, "y": 0.72, "radius": 0.06  },
+        { "id": "pitcher",  "name": "Кувшин",            "difficulty": "easy",   "x": 0.65, "y": 0.55, "radius": 0.055 }
+      ]
+    },
+    {
+      "id": 3,
+      "location": "kitchen",
+      "title": "Уровень 3",
+      "items": [
+        { "id": "samovar",  "name": "Самовар",          "difficulty": "easy",   "x": 0.38, "y": 0.50, "radius": 0.065 },
+        { "id": "fridge",   "name": "Холодильник",      "difficulty": "easy",   "x": 0.86, "y": 0.43, "radius": 0.07  },
+        { "id": "radio",    "name": "Радио",             "difficulty": "easy",   "x": 0.76, "y": 0.28, "radius": 0.055 },
+        { "id": "firewood", "name": "Поленница дров",   "difficulty": "easy",   "x": 0.10, "y": 0.76, "radius": 0.065 },
+        { "id": "pitcher",  "name": "Кувшин",            "difficulty": "easy",   "x": 0.63, "y": 0.56, "radius": 0.055 }
+      ]
+    },
+    {
+      "id": 4,
+      "location": "kitchen",
+      "title": "Уровень 4",
+      "items": [
+        { "id": "samovar",      "name": "Самовар",          "difficulty": "easy",   "x": 0.40, "y": 0.52, "radius": 0.065 },
+        { "id": "oven",         "name": "Печь",              "difficulty": "easy",   "x": 0.13, "y": 0.54, "radius": 0.075 },
+        { "id": "window",       "name": "Окно",              "difficulty": "easy",   "x": 0.50, "y": 0.12, "radius": 0.075 },
+        { "id": "cup",          "name": "Чашка",             "difficulty": "medium", "x": 0.80, "y": 0.33, "radius": 0.05  },
+        { "id": "jam_jar",      "name": "Банка варенья",     "difficulty": "medium", "x": 0.24, "y": 0.36, "radius": 0.05  },
+        { "id": "clock",        "name": "Часы",              "difficulty": "medium", "x": 0.30, "y": 0.21, "radius": 0.05  }
+      ]
+    },
+    {
+      "id": 5,
+      "location": "kitchen",
+      "title": "Уровень 5",
+      "items": [
+        { "id": "fridge",       "name": "Холодильник",      "difficulty": "easy",   "x": 0.88, "y": 0.45, "radius": 0.07  },
+        { "id": "flower",       "name": "Цветок в горшке",  "difficulty": "easy",   "x": 0.54, "y": 0.22, "radius": 0.055 },
+        { "id": "mug",          "name": "Кружка",           "difficulty": "medium", "x": 0.83, "y": 0.36, "radius": 0.05  },
+        { "id": "plate",        "name": "Тарелка",          "difficulty": "medium", "x": 0.76, "y": 0.39, "radius": 0.05  },
+        { "id": "egg",          "name": "Яйцо",             "difficulty": "medium", "x": 0.54, "y": 0.60, "radius": 0.045 },
+        { "id": "apple",        "name": "Яблоко",           "difficulty": "medium", "x": 0.47, "y": 0.62, "radius": 0.048 }
+      ]
+    },
+    {
+      "id": 6,
+      "location": "kitchen",
+      "title": "Уровень 6",
+      "items": [
+        { "id": "radio",        "name": "Радио",             "difficulty": "easy",   "x": 0.77, "y": 0.27, "radius": 0.055 },
+        { "id": "chair",        "name": "Стул",              "difficulty": "easy",   "x": 0.67, "y": 0.73, "radius": 0.06  },
+        { "id": "cutting_board","name": "Разделочная доска", "difficulty": "medium", "x": 0.42, "y": 0.56, "radius": 0.055 },
+        { "id": "wooden_spoon", "name": "Деревянная ложка",  "difficulty": "medium", "x": 0.35, "y": 0.51, "radius": 0.045 },
+        { "id": "pickle_jar",   "name": "Банка с огурцами",  "difficulty": "medium", "x": 0.29, "y": 0.37, "radius": 0.05  },
+        { "id": "jam_jar",      "name": "Банка варенья",     "difficulty": "medium", "x": 0.22, "y": 0.35, "radius": 0.05  }
+      ]
+    },
+    {
+      "id": 7,
+      "location": "kitchen",
+      "title": "Уровень 7",
+      "items": [
+        { "id": "mug",          "name": "Кружка",           "difficulty": "medium", "x": 0.82, "y": 0.35, "radius": 0.05  },
+        { "id": "apple",        "name": "Яблоко",           "difficulty": "medium", "x": 0.47, "y": 0.61, "radius": 0.048 },
+        { "id": "clock",        "name": "Часы",              "difficulty": "medium", "x": 0.31, "y": 0.22, "radius": 0.05  },
+        { "id": "dill",         "name": "Укроп",             "difficulty": "hard",   "x": 0.62, "y": 0.31, "radius": 0.045 },
+        { "id": "poker",        "name": "Кочерга",           "difficulty": "hard",   "x": 0.10, "y": 0.66, "radius": 0.04  },
+        { "id": "towel",        "name": "Полотенце",         "difficulty": "hard",   "x": 0.93, "y": 0.55, "radius": 0.045 },
+        { "id": "garlic_bunch", "name": "Связка чеснока",   "difficulty": "hard",   "x": 0.19, "y": 0.26, "radius": 0.042 }
+      ]
+    },
+    {
+      "id": 8,
+      "location": "kitchen",
+      "title": "Уровень 8",
+      "items": [
+        { "id": "plate",        "name": "Тарелка",          "difficulty": "medium", "x": 0.75, "y": 0.40, "radius": 0.05  },
+        { "id": "wooden_spoon", "name": "Деревянная ложка",  "difficulty": "medium", "x": 0.34, "y": 0.52, "radius": 0.045 },
+        { "id": "egg",          "name": "Яйцо",             "difficulty": "medium", "x": 0.55, "y": 0.59, "radius": 0.045 },
+        { "id": "green_onion",  "name": "Зелёный лук",      "difficulty": "hard",   "x": 0.26, "y": 0.46, "radius": 0.042 },
+        { "id": "onion_bunch",  "name": "Связка лука",      "difficulty": "hard",   "x": 0.73, "y": 0.29, "radius": 0.042 },
+        { "id": "herb_bunch",   "name": "Связка трав",      "difficulty": "hard",   "x": 0.36, "y": 0.23, "radius": 0.042 },
+        { "id": "glass_jar",    "name": "Стеклянная банка", "difficulty": "hard",   "x": 0.86, "y": 0.60, "radius": 0.044 }
+      ]
+    },
+    {
+      "id": 9,
+      "location": "kitchen",
+      "title": "Уровень 9",
+      "items": [
+        { "id": "cup",          "name": "Чашка",            "difficulty": "medium", "x": 0.79, "y": 0.34, "radius": 0.05  },
+        { "id": "cutting_board","name": "Разделочная доска", "difficulty": "medium", "x": 0.43, "y": 0.57, "radius": 0.055 },
+        { "id": "dill",         "name": "Укроп",            "difficulty": "hard",   "x": 0.61, "y": 0.32, "radius": 0.042 },
+        { "id": "poker",        "name": "Кочерга",          "difficulty": "hard",   "x": 0.11, "y": 0.65, "radius": 0.04  },
+        { "id": "rug",          "name": "Половик",          "difficulty": "hard",   "x": 0.50, "y": 0.87, "radius": 0.055 },
+        { "id": "bucket",       "name": "Металлическое ведро","difficulty":"hard",  "x": 0.05, "y": 0.82, "radius": 0.05  },
+        { "id": "garlic_bunch", "name": "Связка чеснока",   "difficulty": "hard",   "x": 0.20, "y": 0.27, "radius": 0.042 }
+      ]
+    },
+    {
+      "id": 10,
+      "location": "kitchen",
+      "title": "Уровень 10",
+      "timer": 300,
+      "items": [
+        { "id": "dill",         "name": "Укроп",            "difficulty": "hard",   "x": 0.61, "y": 0.30, "radius": 0.04  },
+        { "id": "green_onion",  "name": "Зелёный лук",      "difficulty": "hard",   "x": 0.25, "y": 0.45, "radius": 0.04  },
+        { "id": "poker",        "name": "Кочерга",          "difficulty": "hard",   "x": 0.10, "y": 0.64, "radius": 0.038 },
+        { "id": "towel",        "name": "Полотенце",        "difficulty": "hard",   "x": 0.92, "y": 0.57, "radius": 0.042 },
+        { "id": "garlic_bunch", "name": "Связка чеснока",   "difficulty": "hard",   "x": 0.18, "y": 0.26, "radius": 0.04  },
+        { "id": "onion_bunch",  "name": "Связка лука",      "difficulty": "hard",   "x": 0.72, "y": 0.28, "radius": 0.04  },
+        { "id": "herb_bunch",   "name": "Связка трав",      "difficulty": "hard",   "x": 0.35, "y": 0.22, "radius": 0.04  },
+        { "id": "rug",          "name": "Половик",          "difficulty": "hard",   "x": 0.50, "y": 0.88, "radius": 0.052 }
+      ]
+    }
+  ]
+}

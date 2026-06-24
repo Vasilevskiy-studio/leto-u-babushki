@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "leto-babushka",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve", "-p", "3456", "-s", "C:\\Users\\Василевский\\Desktop\\LetoBabushka"],
+      "port": 3456
+    }
+  ]
+}

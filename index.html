@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Лето с бабушкой</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+</head>
+<body>
+
+<!-- ===== ЭКРАН 1: Главный ===== -->
+<div id="screen-main" class="screen active">
+    <div class="main-bg"></div>
+    <!-- Верхняя панель (CSS, без картинки) -->
+    <div id="top-panel">
+        <div class="top-bar-left">
+            <div class="stat-chip">
+                <img src="assets/panel_stat.png.png?v=4" class="stat-chip-bg" alt="">
+                <img src="assets/icon_coin.png.png" class="stat-icon" alt="">
+                <span id="coins-value" class="stat-value">0</span>
+            </div>
+            <div class="stat-chip">
+                <img src="assets/panel_stat.png.png?v=4" class="stat-chip-bg" alt="">
+                <img src="assets/icon_energy.png.png" class="stat-icon" alt="">
+                <div class="stat-value-wrap">
+                    <span id="energy-value" class="stat-value">30</span>
+                    <span id="energy-timer" class="hidden stat-timer"></span>
+                </div>
+            </div>
+            <div class="stat-chip stat-chip-inactive">
+                <img src="assets/panel_stat.png.png?v=4" class="stat-chip-bg" alt="">
+                <img src="assets/icon_malina.png.png" class="stat-icon" alt="">
+                <span id="malina-value" class="stat-value">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопка настроек — верхний правый угол -->
+    <button class="btn-settings-top" onclick="Game.showSettings()">⚙️</button>
+    <!-- Кнопки справа (вертикально над кнопкой Играть) -->
+    <div class="side-btns">
+        <button class="art-btn" onclick="Game.showShop()">
+            <img src="assets/icon_shop.png.png" class="art-btn-icon" alt="">
+            <span class="art-btn-label">Магазин</span>
+        </button>
+        <button class="art-btn" onclick="Game.showAlbum()">
+            <img src="assets/icon_album.png.png" class="art-btn-icon" alt="">
+            <span class="art-btn-label">Альбом</span>
+        </button>
+    </div>
+    <div class="main-content"></div>
+    <img id="logo-title" src="assets/logo_title.png?v=4" alt="Лето с бабушкой" class="logo-title">
+    <div class="main-play-wrap">
+        <img id="btn-play" src="assets/button_play.png?v=4" class="btn-play-img" onclick="Game.showMap()" alt="Играть">
+    </div>
+    <!-- Кнопка Получить монеты -->
+    <div class="coins-btn-wrap">
+        <img id="btn-coins" src="assets/button_coins.png.png?v=1" class="btn-coins-img"
+             onclick="Game.showCoinsModal()" alt="Получить монеты">
+    </div>
+    <!-- Кнопка Ежедневная награда -->
+    <div class="daily-btn-wrap">
+        <div class="daily-dot hidden" id="daily-dot"></div>
+        <img src="assets/button_daily.png.png" class="btn-daily-img"
+             onclick="DailyReward.show()" alt="Ежедневная награда">
+    </div>
+    <!-- Бегущая строка событий -->
+    <div class="news-ticker">
+        <div class="news-ticker-track" id="news-ticker-track"></div>
+    </div>
+</div>
+
+<!-- Поп-ап ежедневных наград -->
+<div id="daily-modal" class="hidden">
+    <div id="daily-panel">
+        <button class="daily-close" onclick="DailyReward.hide()">✕</button>
+        <h2 class="daily-title">🎁 Ежедневная награда</h2>
+        <div class="daily-grid" id="daily-grid"></div>
+        <button class="btn btn-primary daily-claim-btn" id="daily-claim-btn" onclick="DailyReward.claim()">🎁 Забрать награду!</button>
+    </div>
+</div>
+
+<!-- Модальное окно: реклама недоступна -->
+<div id="coins-modal" class="hidden">
+    <div id="coins-modal-panel">
+        <button class="coins-modal-close" onclick="Game.hideCoinsModal()">✕</button>
+        <div class="coins-modal-icon">📺</div>
+        <p class="coins-modal-text">Реклама недоступна — функция появится после публикации на Яндекс Играх</p>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 2: Выбор уровня ===== -->
+<div id="screen-map" class="screen">
+    <div id="map-bg" class="kitchen-bg map-bg-blur"></div>
+    <div class="map-dark-overlay"></div>
+
+    <!-- Кнопка Назад — деревянная стрелка -->
+    <img src="assets/btn_back_wood.png.png" class="btn-back-wood"
+         onclick="Game.showMain()" alt="Назад">
+
+    <!-- Панель энергии слева от доски -->
+    <div class="map-energy-panel">
+        <div class="map-energy-title">⚡ Нужна энергия?</div>
+        <div class="map-energy-card">
+            <img src="assets/reward_energy.png.png" class="map-energy-icon" alt="">
+            <div class="map-energy-label">+1 энергия</div>
+            <div class="map-energy-price">
+                <img src="assets/icon_coin.png.png" class="map-energy-price-icon" alt="">100
+            </div>
+            <button class="map-energy-buy-btn" onclick="Game.buyMapEnergy()"></button>
+        </div>
+        <button class="map-energy-more-btn" onclick="Game.showShopEnergy()">Другие предложения →</button>
+    </div>
+
+    <!-- Кнопки глав справа от доски -->
+    <div class="chapter-tabs">
+        <button id="chapter-tab-kitchen"  class="chapter-tab active" onclick="Game.selectChapter('kitchen')">Глава 1: Кухня</button>
+        <button id="chapter-tab-bath"     class="chapter-tab"        onclick="Game.selectChapter('bath')">Глава 2: Баня</button>
+        <button id="chapter-tab-bedroom"  class="chapter-tab locked" disabled>Глава 3: Спальня</button>
+        <button id="chapter-tab-barn"     class="chapter-tab locked" disabled>Глава 4: Сарай</button>
+        <button id="chapter-tab-chicken"  class="chapter-tab locked" disabled>Глава 5: Курятник</button>
+        <button id="chapter-tab-garden"   class="chapter-tab locked" disabled>Глава 6: Огород</button>
+        <button id="chapter-tab-well"     class="chapter-tab locked" disabled>Глава 7: Колодец</button>
+        <button id="chapter-tab-glade"    class="chapter-tab locked" disabled>Глава 8: Поляна</button>
+        <button id="chapter-tab-river"    class="chapter-tab locked" disabled>Глава 9: Речка</button>
+        <button id="chapter-tab-forest"   class="chapter-tab locked" disabled>Глава 10: Лес</button>
+    </div>
+
+    <!-- Главная доска с уровнями -->
+    <div class="map-board-wrap">
+        <img src="assets/map_board.png.png" class="map-board-img" alt="">
+
+        <!-- Табличка заголовка с цветами -->
+        <div class="map-sign-wrap">
+            <img src="assets/map_sign.png.png" class="map-sign-img" alt="">
+            <img src="assets/map_flowers.png.png" class="map-flowers-img" alt="">
+            <svg class="map-sign-svg" viewBox="0 0 420 70" width="420" height="70">
+                <defs>
+                    <path id="curve" d="M 10,55 Q 210,8 410,55"/>
+                </defs>
+                <text id="map-chapter-title" font-family="Lobster, cursive" font-size="30" fill="#5C3317"
+                      text-anchor="middle">
+                    <textPath href="#curve" startOffset="50%"
+                              style="text-shadow: 1px 1px 2px rgba(255,255,255,0.5)">
+                        Кухня бабушки Гали
+                    </textPath>
+                </text>
+            </svg>
+        </div>
+
+        <!-- Сетка уровней -->
+        <div id="level-grid" class="level-grid"></div>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 3: Игра ===== -->
+<div id="screen-game" class="screen">
+    <div class="game-top-panel">
+        <div class="game-top-left">
+            <button class="game-back-btn" onclick="Game.showMain()">← Назад</button>
+            <div id="lives-display" class="lives-display">❤️❤️❤️</div>
+        </div>
+        <div id="timer-display" class="timer-display">⏱ <span id="timer-value">7:00</span></div>
+        <div class="found-display">Найдено: <span id="found-value">0</span>/<span id="total-value">5</span></div>
+    </div>
+    <div id="game-area" class="game-area">
+        <div id="game-scene-bg" class="kitchen-bg"></div>
+        <div id="game-items-layer" class="game-items-layer"></div>
+        <div id="click-effects" class="click-effects"></div>
+        <canvas id="dev-zones-canvas" style="display:none;position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:50;"></canvas>
+    </div>
+    <div id="dev-panel" style="display:none;position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,0.7);padding:8px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);">
+        <span style="color:#ffd700;font-size:11px;font-weight:bold;margin-right:4px;">DEV</span>
+        <button id="dev-btn-zones" onclick="DevTools.toggleZones()" style="font-size:12px;padding:4px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.15);color:#fff;cursor:pointer;">👁 Зоны</button>
+    </div>
+    <div class="game-bottom-panel">
+        <div id="items-list" class="items-list"></div>
+        <button id="hint-btn" class="hint-btn" onclick="Game.useHint()">💡<span id="hints-left">3</span></button>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 4: Результат ===== -->
+<div id="screen-result" class="screen">
+    <div class="result-bg-kitchen"></div>
+    <div class="result-bg-dark"></div>
+    <div class="result-container">
+        <div id="result-title"  class="result-title"></div>
+        <div id="result-stars"  class="result-stars"></div>
+        <div id="result-coins"  class="result-coins"></div>
+        <div id="result-reason" class="result-reason"></div>
+        <div class="result-buttons">
+            <button id="btn-next" class="btn-next-village" onclick="Game.nextLevel()">Далее</button>
+            <button class="btn btn-secondary" onclick="Game.retryLevel()">Переиграть</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 5: Сюжетная вставка (новелла) ===== -->
+<div id="screen-story" class="screen" onclick="Game.storyAdvance()">
+    <div class="novel-bg"></div>
+    <div class="novel-bg-dark"></div>
+    <!-- Портрет персонажа -->
+    <img id="novel-char" src="" class="novel-char" alt="">
+    <!-- Диалоговое окно + кнопка в одном flex-контейнере -->
+    <div class="novel-dialog-wrap">
+        <div class="novel-dialog-box">
+            <img src="assets/novel_dialog.png.png" class="novel-dialog-bg" alt="">
+            <div class="novel-dialog-inner">
+                <div id="novel-char-name" class="novel-char-name"></div>
+                <p id="novel-text" class="novel-text"></p>
+                <div class="novel-next-hint">▶</div>
+            </div>
+        </div>
+        <button id="novel-continue-btn" class="btn-novel-continue hidden"
+                onclick="event.stopPropagation(); Game.nextStoryLine()">Продолжить →</button>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 6: Альбом ===== -->
+<div id="screen-album" class="screen">
+    <div class="album-bg"></div>
+    <img src="assets/btn_back_wood.png.png" class="btn-back-wood" onclick="Game.showMain()" alt="Назад">
+    <div class="album-content">
+        <h2 class="album-title">Альбом воспоминаний</h2>
+        <div id="album-grid" class="album-grid"></div>
+    </div>
+    <!-- Лайтбокс просмотра фото -->
+    <div id="album-lightbox" class="hidden">
+        <div class="album-lightbox-bg" onclick="Game.closeAlbumLightbox()"></div>
+        <div class="album-lightbox-inner">
+            <button class="modal-close-btn" onclick="Game.closeAlbumLightbox()">✕</button>
+            <img id="album-lightbox-img" src="" class="album-lightbox-photo" alt="">
+            <div id="album-lightbox-label" class="album-lightbox-label"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 7: Магазин ===== -->
+<div id="screen-shop" class="screen">
+    <div class="shop-bg"></div>
+    <img src="assets/btn_back_wood.png.png" class="btn-back-wood" onclick="Game.showMain()" alt="Назад">
+    <!-- Панель ресурсов в магазине -->
+    <div class="shop-stats-bar">
+        <div class="stat-chip">
+            <img src="assets/panel_stat.png.png?v=4" class="stat-chip-bg" alt="">
+            <img src="assets/icon_coin.png.png" class="stat-icon" alt="">
+            <span id="shop-coins-value" class="stat-value">0</span>
+        </div>
+        <div class="stat-chip">
+            <img src="assets/panel_stat.png.png?v=4" class="stat-chip-bg" alt="">
+            <img src="assets/icon_energy.png.png" class="stat-icon" alt="">
+            <span id="shop-energy-value" class="stat-value">30</span>
+        </div>
+        <div class="stat-chip">
+            <img src="assets/panel_stat.png.png?v=4" class="stat-chip-bg" alt="">
+            <img src="assets/icon_malina.png.png" class="stat-icon" alt="">
+            <span id="shop-malina-value" class="stat-value">0</span>
+        </div>
+    </div>
+    <div class="shop-frame-wrap">
+        <img src="assets/shop_frame.png.png" class="shop-frame-img" alt="">
+        <div class="shop-frame-inner">
+            <h2 class="shop-title">🏪 Лавка бабушки</h2>
+            <div class="shop-tabs" id="shop-tabs"></div>
+            <div class="shop-cards" id="shop-cards"></div>
+        </div>
+    </div>
+    <!-- Попап: малина недоступна -->
+    <div id="shop-malina-popup" class="hidden">
+        <div class="shop-popup-bg" onclick="Shop.closeMalinaPopup()"></div>
+        <div class="shop-popup-panel">
+            <button class="modal-close-btn" onclick="Shop.closeMalinaPopup()">✕</button>
+            <p class="shop-popup-text">Покупка малины будет доступна после публикации игры на Яндекс Играх</p>
+        </div>
+    </div>
+    <!-- Тост-уведомление -->
+    <div id="shop-notify" class="shop-notify hidden"></div>
+</div>
+
+<!-- ===== ЭКРАН 8: Настройки ===== -->
+<div id="screen-settings" class="screen">
+    <div class="screen-bg-dark"></div>
+    <div class="settings-card">
+        <div class="settings-card-bg"></div>
+        <div class="settings-card-inner">
+            <h2 class="settings-card-title">⚙️ Настройки</h2>
+            <div class="settings-rows">
+                <div class="setting-row">
+                    <span class="setting-row-label">🎵 Музыка</span>
+                    <button id="music-toggle" class="village-toggle" onclick="Game.toggleMusic()">ВКЛ</button>
+                </div>
+                <div class="setting-row setting-row-slider">
+                    <span class="setting-row-label">🔈 Громкость</span>
+                    <div class="volume-control">
+                        <input type="range" id="music-volume-slider" class="volume-slider"
+                               min="0" max="100" value="8"
+                               oninput="Music.setVolume(this.value/100); document.getElementById('music-volume-label').textContent=this.value+'%'">
+                        <span id="music-volume-label" class="volume-label">8%</span>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-row-label">🔊 Звуки</span>
+                    <button id="sound-toggle" class="village-toggle" onclick="Game.toggleSound()">ВКЛ</button>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-row-label">🏆 Достижения</span>
+                    <button class="btn btn-secondary" onclick="Game.showAchievements()">Открыть</button>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-row-label">🗑️ Сбросить прогресс</span>
+                    <button class="btn btn-secondary" onclick="Game.resetSave()">Сброс</button>
+                </div>
+            </div>
+            <button class="btn btn-primary settings-close-btn" onclick="Game.showMain()">✕ Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 9: Достижения ===== -->
+<div id="screen-achievements" class="screen">
+    <div class="screen-bg-dark"></div>
+    <div class="screen-header">
+        <button class="btn btn-back" onclick="Game.showSettings()">← Назад</button>
+        <h2 class="screen-title">🏆 Достижения</h2>
+        <div style="width:80px"></div>
+    </div>
+    <div id="achievements-list" class="achievements-list"></div>
+</div>
+
+<!-- ===== ОБУЧЕНИЕ ===== -->
+<div id="tutorial-overlay" class="hidden"></div>
+<div id="tutorial-frame"></div>
+<div id="tutorial-panel">
+  <p id="tutorial-text"></p>
+  <button id="tutorial-next-btn" onclick="Tutorial.next()">Далее ▶</button>
+</div>
+
+<!-- === Профиль: поп-ап первого запуска === -->
+<div id="profile-setup-modal" class="hidden">
+    <div id="profile-setup-panel">
+        <h2 class="profile-modal-title">Как тебя зовут?</h2>
+        <div class="avatar-grid" id="profile-avatar-grid"></div>
+        <input type="text" id="profile-nick-input" class="profile-nick-input"
+               placeholder="Введи своё имя" maxlength="15" autocomplete="off">
+        <button class="btn btn-primary profile-action-btn" id="profile-start-btn"
+                onclick="Profile.save()" disabled>Начать игру!</button>
+    </div>
+</div>
+
+<!-- === Профиль: поп-ап смены аватара === -->
+<div id="avatar-change-modal" class="hidden">
+    <div id="avatar-change-panel">
+        <button class="modal-close-btn" onclick="Profile.closeAvatarChange()">✕</button>
+        <h2 class="profile-modal-title">Выбери аватар</h2>
+        <div class="avatar-grid" id="change-avatar-grid"></div>
+        <button class="btn btn-primary profile-action-btn"
+                onclick="Profile.saveAvatar()">Сохранить</button>
+    </div>
+</div>
+
+<!-- === Профиль: панель (только главный экран) === -->
+<div id="profile-panel" class="hidden">
+    <img src="assets/profile_panel.png.png" class="profile-panel-bg" alt="">
+    <div class="profile-panel-inner" onclick="Profile.openAvatarChange()">
+        <div class="profile-avatar-wrap">
+            <img id="profile-avatar-img" src="" class="profile-avatar-img" alt="">
+        </div>
+        <span id="profile-nick-display" class="profile-nick-display"></span>
+    </div>
+</div>
+
+<!-- === Анимация выдачи фотокарточки === -->
+<div id="photo-award-overlay" class="hidden">
+    <div class="photo-award-rays"></div>
+    <div id="photo-award-wrap">
+        <img id="photo-award-img" src="" class="photo-award-card" alt="">
+        <div class="photo-award-text">Новое воспоминание!</div>
+        <div class="photo-award-sub">Кухня бабушки Гали</div>
+    </div>
+    <div id="photo-award-album-hint"></div>
+</div>
+
+<div id="custom-cursor"></div>
+<script src="game.js"></script>
+</body>
+</html>

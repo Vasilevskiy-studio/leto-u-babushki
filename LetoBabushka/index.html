@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Лето с бабушкой</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== ЭКРАН 1: Главный ===== -->
+<div id="screen-main" class="screen active">
+    <div class="main-bg"></div>
+    <div class="hud-top-right">
+        <div class="hud-item">
+            <span>⚡</span>
+            <span id="energy-value">30/30</span>
+            <span id="energy-timer" class="hidden"></span>
+        </div>
+        <div class="hud-item">
+            <span>🪙</span>
+            <span id="coins-value">0</span>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="main-title-wrap">
+            <h1 class="main-title">Лето<br>с бабушкой</h1>
+            <p class="main-subtitle">Помоги найти потерявшиеся вещи!</p>
+        </div>
+        <div class="main-buttons">
+            <button id="btn-play" class="btn btn-primary btn-large" onclick="Game.showMap()">Играть</button>
+            <button class="btn btn-secondary" onclick="Game.showAchievements()">🏆 Достижения</button>
+            <button class="btn btn-secondary" onclick="Game.showSettings()">⚙️ Настройки</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 2: Карта уровней ===== -->
+<div id="screen-map" class="screen">
+    <div class="kitchen-bg"></div>
+    <div class="screen-header">
+        <button class="btn btn-back" onclick="Game.showMain()">← Назад</button>
+        <h2 class="screen-title">🥧 Кухня бабушки Гали</h2>
+        <div style="width:80px"></div>
+    </div>
+    <div id="level-grid" class="level-grid"></div>
+</div>
+
+<!-- ===== ЭКРАН 3: Игра ===== -->
+<div id="screen-game" class="screen">
+    <div class="game-top-panel">
+        <div id="lives-display" class="lives-display">❤️❤️❤️</div>
+        <div id="timer-display" class="timer-display">⏱ <span id="timer-value">7:00</span></div>
+        <div class="found-display">Найдено: <span id="found-value">0</span>/<span id="total-value">5</span></div>
+    </div>
+    <div id="game-area" class="game-area">
+        <div class="kitchen-bg"></div>
+        <div id="game-items-layer" class="game-items-layer"></div>
+        <div id="click-effects" class="click-effects"></div>
+    </div>
+    <div class="game-bottom-panel">
+        <div id="items-list" class="items-list"></div>
+        <button id="hint-btn" class="hint-btn" onclick="Game.useHint()">💡<span id="hints-left">3</span></button>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 4: Результат ===== -->
+<div id="screen-result" class="screen">
+    <div class="result-overlay"></div>
+    <div class="result-container">
+        <div id="result-icon" class="result-icon"></div>
+        <div id="result-title" class="result-title"></div>
+        <div id="result-stars" class="result-stars"></div>
+        <div id="result-coins" class="result-coins"></div>
+        <div id="result-reason" class="result-reason"></div>
+        <div class="result-buttons">
+            <button id="btn-next" class="btn btn-primary" onclick="Game.nextLevel()">Далее ▶</button>
+            <button class="btn btn-secondary" onclick="Game.retryLevel()">🔄 Переиграть</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 5: Сюжетная вставка ===== -->
+<div id="screen-story" class="screen">
+    <div class="story-bg"></div>
+    <div class="story-wrap">
+        <div class="story-container">
+            <div class="story-portrait">
+                <div id="story-avatar" class="story-avatar">👵</div>
+                <div id="story-char-name" class="story-char-name">Бабушка Галя</div>
+            </div>
+            <div class="story-text-wrap">
+                <p id="story-text" class="story-text"></p>
+            </div>
+        </div>
+        <button class="btn btn-primary story-next-btn" onclick="Game.nextStoryLine()">Далее ▶</button>
+    </div>
+</div>
+
+<!-- ===== ЭКРАН 6: Достижения ===== -->
+<div id="screen-achievements" class="screen">
+    <div class="screen-bg-dark"></div>
+    <div class="screen-header">
+        <button class="btn btn-back" onclick="Game.showMain()">← Назад</button>
+        <h2 class="screen-title">🏆 Достижения</h2>
+        <div style="width:80px"></div>
+    </div>
+    <div id="achievements-list" class="achievements-list"></div>
+</div>
+
+<!-- ===== ЭКРАН 7: Настройки ===== -->
+<div id="screen-settings" class="screen">
+    <div class="screen-bg-dark"></div>
+    <div class="screen-header">
+        <button class="btn btn-back" onclick="Game.showMain()">← Назад</button>
+        <h2 class="screen-title">⚙️ Настройки</h2>
+        <div style="width:80px"></div>
+    </div>
+    <div class="settings-list">
+        <div class="setting-item">
+            <span class="setting-label">🔊 Звук</span>
+            <button id="sound-toggle" class="toggle-btn" onclick="Game.toggleSound()">ВКЛ</button>
+        </div>
+        <div class="setting-item">
+            <span class="setting-label">🎵 Музыка</span>
+            <button id="music-toggle" class="toggle-btn" onclick="Game.toggleMusic()">ВКЛ</button>
+        </div>
+        <div class="setting-item">
+            <span class="setting-label">🗑️ Сбросить прогресс</span>
+            <button class="btn btn-secondary" onclick="Game.resetSave()" style="padding:8px 16px;font-size:0.9rem">Сброс</button>
+        </div>
+    </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
