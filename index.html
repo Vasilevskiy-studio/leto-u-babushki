@@ -121,7 +121,7 @@
     <div class="chapter-tabs">
         <button id="chapter-tab-kitchen"  class="chapter-tab active" onclick="Game.selectChapter('kitchen')">Глава 1: Кухня</button>
         <button id="chapter-tab-bath"     class="chapter-tab"        onclick="Game.selectChapter('bath')">Глава 2: Баня</button>
-        <button id="chapter-tab-bedroom"  class="chapter-tab locked" disabled>Глава 3: Спальня</button>
+        <button id="chapter-tab-bedroom"  class="chapter-tab locked" onclick="Game.selectChapter('bedroom')" disabled>Глава 3: Спальня</button>
         <button id="chapter-tab-barn"     class="chapter-tab locked" disabled>Глава 4: Сарай</button>
         <button id="chapter-tab-chicken"  class="chapter-tab locked" disabled>Глава 5: Курятник</button>
         <button id="chapter-tab-garden"   class="chapter-tab locked" disabled>Глава 6: Огород</button>
@@ -173,10 +173,6 @@
         <div id="game-items-layer" class="game-items-layer"></div>
         <div id="click-effects" class="click-effects"></div>
         <canvas id="dev-zones-canvas" style="display:none;position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:50;"></canvas>
-    </div>
-    <div id="dev-panel" style="display:none;position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,0.7);padding:8px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);">
-        <span style="color:#ffd700;font-size:11px;font-weight:bold;margin-right:4px;">DEV</span>
-        <button id="dev-btn-zones" onclick="DevTools.toggleZones()" style="font-size:12px;padding:4px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.15);color:#fff;cursor:pointer;">👁 Зоны</button>
     </div>
     <div class="game-bottom-panel">
         <div id="items-list" class="items-list"></div>
@@ -234,8 +230,11 @@
         <div class="album-lightbox-bg" onclick="Game.closeAlbumLightbox()"></div>
         <div class="album-lightbox-inner">
             <button class="modal-close-btn" onclick="Game.closeAlbumLightbox()">✕</button>
-            <img id="album-lightbox-img" src="" class="album-lightbox-photo" alt="">
+            <div id="album-lightbox-viewport" class="album-lightbox-viewport">
+                <img id="album-lightbox-img" src="" class="album-lightbox-photo" alt="" onclick="Game.toggleAlbumZoom(event)">
+            </div>
             <div id="album-lightbox-label" class="album-lightbox-label"></div>
+            <div class="album-lightbox-hint">🔍 Нажми на фото, чтобы приблизить</div>
         </div>
     </div>
 </div>
@@ -346,7 +345,7 @@
         <h2 class="profile-modal-title">Как тебя зовут?</h2>
         <div class="avatar-grid" id="profile-avatar-grid"></div>
         <input type="text" id="profile-nick-input" class="profile-nick-input"
-               placeholder="Введи своё имя" maxlength="15" autocomplete="off">
+               placeholder="Введи своё имя" maxlength="12" autocomplete="off">
         <button class="btn btn-primary profile-action-btn" id="profile-start-btn"
                 onclick="Profile.save()" disabled>Начать игру!</button>
     </div>
@@ -364,14 +363,50 @@
 </div>
 
 <!-- === Профиль: панель (только главный экран) === -->
-<div id="profile-panel" class="hidden">
-    <img src="assets/profile_panel.png.png" class="profile-panel-bg" alt="">
-    <div class="profile-panel-inner" onclick="Profile.openAvatarChange()">
-        <div class="profile-avatar-wrap">
-            <img id="profile-avatar-img" src="" class="profile-avatar-img" alt="">
-        </div>
-        <span id="profile-nick-display" class="profile-nick-display"></span>
+<div id="profile-panel" class="hidden profile-panel" onclick="Profile.openAvatarChange()">
+    <div class="profile-avatar-ring">
+        <img id="profile-avatar-img" src="" class="profile-avatar" alt="">
     </div>
+    <span id="profile-nick-display" class="profile-nick"></span>
+</div>
+
+<!-- === DEV-режим (Ctrl+Shift+D) === -->
+<button id="dev-fab" class="hidden" onclick="DevTools.togglePanel()">DEV</button>
+<div id="dev-sidebar">
+    <button class="dev-close" onclick="DevTools.closePanel()">✕</button>
+    <h2 class="dev-sidebar-title">🛠 DEV PANEL</h2>
+
+    <div class="dev-row">
+        <span>👁 Показ зон</span>
+        <label class="dev-switch">
+            <input type="checkbox" id="dev-toggle-zones" onchange="DevTools.setZones(this.checked)">
+            <span class="dev-slider"></span>
+        </label>
+    </div>
+    <div class="dev-row">
+        <span>📍 Координаты</span>
+        <label class="dev-switch">
+            <input type="checkbox" id="dev-toggle-coords" onchange="DevTools.setCoords(this.checked)">
+            <span class="dev-slider"></span>
+        </label>
+    </div>
+    <div class="dev-row">
+        <span>✏️ Редактор зон</span>
+        <label class="dev-switch">
+            <input type="checkbox" id="dev-toggle-editor" onchange="ZoneEditor.setActive(this.checked)">
+            <span class="dev-slider"></span>
+        </label>
+    </div>
+    <div id="dev-zone-info" class="dev-zone-info" style="display:none"></div>
+    <div class="dev-row"><span>💾 Сохранить зоны</span><button class="dev-act" id="dev-btn-save-zones" onclick="ZoneEditor.saveZones(this)" disabled>OK</button></div>
+
+    <div class="dev-row"><span>⏱ Сбросить таймер</span><button class="dev-act" onclick="DevTools.resetTimer(this)">OK</button></div>
+    <div class="dev-row"><span>❤️ Восстановить жизни</span><button class="dev-act" onclick="DevTools.restoreLives(this)">OK</button></div>
+    <div class="dev-row"><span>⚡ Восстановить энергию</span><button class="dev-act" onclick="DevTools.restoreEnergy(this)">OK</button></div>
+    <div class="dev-row"><span>🪙 +999 монет</span><button class="dev-act" onclick="DevTools.addCoins(this)">OK</button></div>
+    <div class="dev-row"><span>🍓 +999 малины</span><button class="dev-act" onclick="DevTools.addMalina(this)">OK</button></div>
+
+    <button id="dev-reset-game" onclick="DevTools.resetGame()">🔄 СБРОС ИГРЫ</button>
 </div>
 
 <!-- === Анимация выдачи фотокарточки === -->
@@ -385,7 +420,6 @@
     <div id="photo-award-album-hint"></div>
 </div>
 
-<div id="custom-cursor"></div>
 <script src="game.js"></script>
 </body>
 </html>

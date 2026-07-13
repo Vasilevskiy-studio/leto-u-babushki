@@ -16,7 +16,18 @@
       "Bash(popup_bg\")",
       "PowerShell(Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\('D:\\\\Лето у бабушки\\\\assets\\\\cursor.png.png'\\); \"$\\($img.Width\\)x$\\($img.Height\\)\"; $img.Dispose\\(\\))",
       "Bash(grep -n \"showMap\\\\|showStory\\\\|showScreen\\\\|startLevel\" \"D:/Лего у бабушки/game.js\" 2>/dev/null || grep -n \"showMap\\\\|showStory\\\\|showScreen\\\\|startLevel\" \"D:/Лето у бабушки/game.js\" | head -30)",
-      "Bash(git --version)"
+      "Bash(git --version)",
+      "Bash(git -C \"D:/Лето у бабушки\" config user.email \"urravass@gmail.com\")",
+      "Bash(git -C \"D:/Лето у бабушки\" config user.name \"Василевский\")",
+      "Bash(git -C \"D:/Лето у бабушки\" remote add origin https://github.com/Vasilevskiy-studio/leto-u-babushki.git)",
+      "Bash(git -C \"D:/Лето у бабушки\" branch -M main)",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\(\"D:\\\\Лето у бабушки\\\\assets\\\\cursor.png.png\"\\); \"$\\($img.Width\\) x $\\($img.Height\\)\"; $img.Dispose\\(\\))",
+      "Bash(git -C \"D:/Лето у бабушки\" mv \"assets/Zvonkiy_ruchey \\(1\\).mp3\" \"assets/music_game.mp3\")",
+      "Bash(node --check \"D:/Лето у бабушки/game.js\")",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('D:/Лето у бабушки/levels.json','utf8'\\)\\); console.log\\('JSON OK'\\)\")",
+      "Bash(grep -n \"length: 8\\\\|length: 7\\\\|Глава \\\\${\" \"D:/Лето у бабушки/game.js\")",
+      "Bash(git -C \"D:/Лето у бабушки\" add -A)",
+      "Bash(git -C \"D:/Лето у бабушки\" status --short)"
     ]
   }
 }

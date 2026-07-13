@@ -48,12 +48,17 @@ html, body {
 
 .kitchen-bg {
     position: absolute; inset: 0; z-index: 0;
-    background:
-        url('assets/kitchen_bg.jpg.png') center/cover no-repeat,
-        linear-gradient(180deg, #e8d4b0 0%, #d4b080 18%, #c09060 19%, #b08050 55%, #8b6035 56%, #6b4820 100%);
+    background: url('assets/kitchen_bg.jpg.png') center/cover no-repeat;
 }
 .kitchen-bg::before { content: none; }
 .kitchen-bg::after  { content: none; }
+
+/* Фон ИГРОВОГО уровня — картинка всегда целиком (contain);
+   поля-letterbox залиты тёмно-коричневым. Карту (#map-bg) не трогаем — там cover. */
+#game-scene-bg {
+    background-size: contain !important;
+    background-color: #2a1a0f !important;
+}
 
 /* === HUD главного экрана === */
 .hidden { display: none !important; }
@@ -313,6 +318,11 @@ html, body {
     background: url('assets/bath_bg.jpg.png') center/cover no-repeat;
 }
 
+.bedroom-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: url('assets/bedroom_bg.jpg.png') center/cover no-repeat;
+}
+
 /* Вкладки глав */
 .chapter-tabs {
     position: absolute;
@@ -551,16 +561,9 @@ html, body {
 
 /* === Игровой экран === */
 #screen-game { flex-direction: column; justify-content: flex-start; }
-/* Прячем системный курсор везде */
-*, *::before, *::after { cursor: none !important; }
-
-/* DOM-курсор — смещение подобрано по позиции кончика стрелки в изображении */
-#custom-cursor {
-    position: fixed; pointer-events: none; z-index: 9999;
-    width: 96px; height: 64px;
-    background: url('assets/cursor.png.png') top left/100% 100% no-repeat;
-    transform: translate(-14px, -8px);
-}
+/* Кастомный курсор: hotspot 1 0 — кончик стрелки в левом верхнем углу картинки.
+   Картинка 31x32 — браузеры Windows игнорируют hotspot у курсоров больше 32px. */
+*, *::before, *::after { cursor: url('assets/cursor_32.png') 1 0, auto !important; }
 
 .game-top-panel {
     width: 100%; flex-shrink: 0;
@@ -790,6 +793,214 @@ html, body {
     color: #2a9d2a;
     margin-top: 4px;
 }
+
+/* === DEV-панель (Ctrl+Shift+D) === */
+#dev-fab {
+    position: fixed;
+    bottom: 12px; left: 50%; transform: translateX(-50%);
+    z-index: 9998;
+    font-family: monospace; font-size: 14px; font-weight: bold;
+    letter-spacing: 2px;
+    color: #ffd700;
+    background: rgba(20,20,20,0.9);
+    border: 1px solid rgba(255,215,0,0.5);
+    border-radius: 10px;
+    padding: 7px 20px;
+    cursor: pointer;
+}
+#dev-fab:hover { background: rgba(40,40,40,0.95); }
+#dev-fab.hidden { display: none; }
+
+#dev-sidebar {
+    position: fixed;
+    top: 0; right: 0;
+    width: 280px; height: 100%;
+    background: rgba(20,20,20,0.95);
+    z-index: 9999;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 16px 14px;
+    box-sizing: border-box;
+    font-family: monospace; font-size: 14px; color: #E0E0E0;
+    overflow-y: auto;
+}
+#dev-sidebar.open { transform: translateX(0); }
+
+/* Панель координат сдвигается влево, когда открыта дев-панель */
+#dev-sidebar.open ~ .devcoords-panel { right: 292px; }
+
+.dev-close {
+    position: absolute; top: 10px; right: 10px;
+    width: 28px; height: 28px;
+    background: none; border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    color: #E0E0E0; font-size: 14px;
+    cursor: pointer;
+}
+.dev-close:hover { background: rgba(255,255,255,0.1); }
+
+.dev-sidebar-title {
+    font-family: monospace; font-size: 16px;
+    color: #ffd700; letter-spacing: 1px;
+    margin: 0 0 10px; text-align: left;
+}
+
+.dev-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
+    padding: 7px 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+}
+.dev-row > span { white-space: nowrap; }
+
+/* Переключатель */
+.dev-switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+.dev-switch input { opacity: 0; width: 0; height: 0; }
+.dev-slider {
+    position: absolute; inset: 0;
+    background: #555; border-radius: 22px;
+    transition: background 0.2s;
+}
+.dev-slider::before {
+    content: '';
+    position: absolute; left: 3px; top: 3px;
+    width: 16px; height: 16px;
+    background: #E0E0E0; border-radius: 50%;
+    transition: transform 0.2s;
+}
+.dev-switch input:checked + .dev-slider { background: #2e7d32; }
+.dev-switch input:checked + .dev-slider::before { transform: translateX(18px); }
+
+/* Кнопки действий */
+.dev-act {
+    flex-shrink: 0;
+    font-family: monospace; font-size: 12px; font-weight: bold;
+    color: #E0E0E0;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.dev-act:hover { background: rgba(255,255,255,0.22); }
+.dev-act.flash { animation: devFlash 0.5s ease; }
+@keyframes devFlash {
+    0%   { background: #2e7d32; border-color: #4caf50; }
+    100% { background: rgba(255,255,255,0.12); }
+}
+
+.dev-act:disabled { opacity: 0.35; cursor: default; }
+.dev-act:disabled:hover { background: rgba(255,255,255,0.12); }
+
+/* Инфо о выбранной зоне */
+.dev-zone-info {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,215,0,0.35);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px; line-height: 1.5;
+    color: #ffd700;
+    word-break: break-word;
+}
+
+/* === Редактор зон === */
+#zone-editor-layer { position: absolute; inset: 0; z-index: 60; }
+.ze-zone {
+    position: absolute;
+    background: rgba(255,0,0,0.18);
+    border: 2px solid rgba(255,0,0,0.8);
+    box-sizing: border-box;
+    cursor: move;
+    display: flex; align-items: center; justify-content: center;
+}
+.ze-zone.dragging { background: rgba(255,215,0,0.3); border-color: #ffd700; }
+.ze-zone.selected { border-color: #2eff5e; box-shadow: 0 0 0 2px rgba(46,255,94,0.5); }
+.ze-label {
+    font: bold 11px sans-serif; color: #fff;
+    text-shadow: 0 0 4px #000;
+    pointer-events: none; user-select: none;
+    white-space: nowrap;
+}
+.ze-handle {
+    position: absolute; width: 12px; height: 12px;
+    background: #fff; border: 2px solid #d03010; border-radius: 3px;
+    box-sizing: border-box; z-index: 2;
+}
+.ze-nw { left: -6px;  top: -6px;    cursor: nwse-resize; }
+.ze-ne { right: -6px; top: -6px;    cursor: nesw-resize; }
+.ze-sw { left: -6px;  bottom: -6px; cursor: nesw-resize; }
+.ze-se { right: -6px; bottom: -6px; cursor: nwse-resize; }
+.ze-n  { left: 50%; top: -6px;    margin-left: -6px; cursor: ns-resize; }
+.ze-s  { left: 50%; bottom: -6px; margin-left: -6px; cursor: ns-resize; }
+.ze-e  { right: -6px; top: 50%;   margin-top: -6px;  cursor: ew-resize; }
+.ze-w  { left: -6px;  top: 50%;   margin-top: -6px;  cursor: ew-resize; }
+
+/* Маркер вращения: кружок на ножке над зоной, виден у выбранной */
+.ze-rotate {
+    position: absolute;
+    left: 50%; top: -36px; margin-left: -8px;
+    width: 16px; height: 16px;
+    background: #ffd700; border: 2px solid #333;
+    border-radius: 50%;
+    box-sizing: border-box;
+    cursor: grab;
+    display: none;
+    z-index: 3;
+}
+.ze-rotate::after {
+    content: '';
+    position: absolute;
+    left: 50%; top: 12px; margin-left: -1px;
+    width: 2px; height: 22px;
+    background: #ffd700;
+}
+.ze-zone.selected .ze-rotate { display: block; }
+
+/* Кнопки смены формы в инфо-блоке */
+.dev-shape-btns { display: flex; gap: 5px; margin-top: 7px; }
+.dev-shape-btn {
+    flex: 1;
+    font-family: monospace; font-size: 11px;
+    color: #E0E0E0;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    padding: 4px 2px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.dev-shape-btn:hover  { background: rgba(255,255,255,0.2); }
+.dev-shape-btn.active { background: #2e7d32; border-color: #4caf50; color: #fff; }
+.dev-shape-hint { margin-top: 5px; font-size: 10px; color: rgba(255,255,255,0.45); }
+
+/* Тост редактора */
+#ze-toast {
+    position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%);
+    z-index: 10000;
+    background: #2e7d32; color: #fff;
+    font-family: monospace; font-size: 14px; font-weight: bold;
+    padding: 10px 22px; border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+}
+#ze-toast.show { opacity: 1; }
+
+/* Красная кнопка сброса внизу */
+#dev-reset-game {
+    margin-top: auto;
+    font-family: monospace; font-size: 14px; font-weight: bold;
+    color: #fff;
+    background: #b71c1c;
+    border: 1px solid #e53935;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+}
+#dev-reset-game:hover { background: #d32f2f; }
 
 /* === Эффекты кликов === */
 .click-effects { position: absolute; inset: 0; z-index: 25; pointer-events: none; }
@@ -1176,14 +1387,34 @@ html, body {
     display: flex; flex-direction: column;
     align-items: center; gap: 16px;
 }
-.album-lightbox-photo {
-    max-width: 600px; max-height: 500px;
+.album-lightbox-viewport {
+    width: min(90vw, 600px);
+    height: min(80vh, 500px);
+    overflow: hidden;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+}
+.album-lightbox-photo {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    cursor: zoom-in;
+    transform: scale(1);
+    transform-origin: center center;
+    transition: transform 0.35s ease;
+    display: block;
+}
+.album-lightbox-photo.zoomed {
+    cursor: zoom-out;
+    transform: scale(2.4);
 }
 .album-lightbox-label {
     font-family: 'Lobster', cursive;
     font-size: 24px; color: #fff;
+}
+.album-lightbox-hint {
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px; color: rgba(255,255,255,0.6);
+    margin-top: -8px;
 }
 
 /* === Анимация выдачи фотокарточки === */
@@ -1874,45 +2105,54 @@ html, body {
 /* Панель профиля на главном экране */
 #profile-panel {
     position: fixed;
-    top: -15px; right: 200px;
+    /* хедер 80px, панель 68px (круг 56 + отступы 8 + рамка 4) → (80-68)/2 = 6px */
+    top: 6px; right: 200px;
     z-index: 105;
-    height: 110px; width: auto;
     cursor: pointer;
     transition: transform 0.2s ease;
-    display: flex; align-items: center;
 }
 #profile-panel:hover { transform: scale(1.04); }
 #profile-panel.hidden { display: none; }
 
-.profile-panel-bg {
-    position: absolute; left: 0; top: 0;
-    height: 100%; width: auto;
-    object-fit: contain; pointer-events: none;
+.profile-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(180deg, #8B5A2B 0%, #6B4423 100%);
+    border: 2px solid #5C3317;
+    border-radius: 34px;
+    padding: 4px 18px 4px 4px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.2);
+    max-width: 260px;
 }
 
-.profile-panel-inner {
-    position: relative; z-index: 1;
-    height: 100%;
-    display: flex; align-items: center;
-    padding: 0 16px 0 12px; gap: 10px;
-}
-
-.profile-avatar-wrap {
+/* Круглая рамка в высоту панели, прижата к левому краю */
+.profile-avatar-ring {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid #D4A76A;
+    overflow: hidden;
     flex-shrink: 0;
-    width: 56px; height: 56px;
 }
 
-.profile-avatar-img {
-    width: 56px; height: 56px;
-    border-radius: 50%; object-fit: cover; display: block;
+/* Картинки аватаров имеют прозрачные поля — увеличиваем, чтобы лицо
+   заполняло круг целиком (лишнее обрезается рамкой) */
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.35);
 }
 
-.profile-nick-display {
+.profile-nick {
     font-family: 'Lobster', cursive;
-    font-size: 18px; color: #5C3317;
-    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
-    white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; max-width: 130px;
+    font-size: 18px;
+    color: #FFF8F0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* === Адаптив === */

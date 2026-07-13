@@ -51,8 +51,76 @@ const STORY_SCENES = {
         { char: 'char_grandma', side: 'right', name: 'Бабушка Галя', text: 'Какие же вы у меня молодцы! Это лето я никогда не забуду.' },
         { char: 'char_grandma', side: 'right', name: 'Бабушка Галя', text: 'Завтра пойдём в баню — там тоже нужна ваша помощь!' },
         { char: 'char_murzik',  side: 'left',  name: 'Мурзик',       text: 'Мяу! (Мурзик довольно мурлычет и трётся о ноги бабушки)' }
+    ],
+    103: [
+        { char: 'char_dedushka', side: 'right', name: 'Дед Петрович', text: 'О, а вот и помощники! Наслышан, наслышан...' },
+        { char: 'char_grandma',  side: 'left',  name: 'Бабушка Галя', text: 'Дед, покажи им как баню топить по-настоящему!' },
+        { char: 'char_maxim',    side: 'left',  name: 'Максим',       text: 'А это правда что баня лечит от всех болезней?' }
+    ],
+    106: [
+        { char: 'char_dedushka', side: 'right', name: 'Дед Петрович', text: 'Гляди-ка, а у меня в бане ключик один завалялся...' },
+        { char: 'char_anya',     side: 'left',  name: 'Аня',          text: 'Ключик? Может это от бабушкиной шкатулки?!' },
+        { char: 'char_dedushka', side: 'right', name: 'Дед Петрович', text: 'Хех, а ну-ка поищите его получше среди веников!' }
+    ],
+    110: [
+        { char: 'char_maxim',    side: 'left',  name: 'Максим',       text: 'Дедушка, мы нашли ключ! Вот он!' },
+        { char: 'char_dedushka', side: 'right', name: 'Дед Петрович', text: 'Ай да молодцы! Теперь можно и шкатулку открыть...' },
+        { char: 'char_grandma',  side: 'left',  name: 'Бабушка Галя', text: 'Не сегодня, дорогие мои. Сначала — баня, попарьтесь как следует!' },
+        { char: 'char_murzik',   side: 'left',  name: 'Мурзик',       text: 'Мяу! (Мурзик довольно потягивается у печки)' }
+    ],
+    203: [
+        { char: 'char_anya',    side: 'left',  name: 'Аня',          text: 'Бабуля, мы принесли ключ! Давай откроем шкатулку!' },
+        { char: 'char_grandma', side: 'right', name: 'Бабушка Галя', text: 'Ох, милые... А я ведь и забыла куда её положила!' },
+        { char: 'char_maxim',   side: 'left',  name: 'Максим',       text: 'Бабуль, ну ты даёшь! Будем искать!' }
+    ],
+    206: [
+        { char: 'char_grandma', side: 'right', name: 'Бабушка Галя', text: 'Помню, прятала её где-то здесь, в спальне...' },
+        { char: 'char_anya',    side: 'left',  name: 'Аня',          text: 'А что в ней такое ценное, бабуль?' },
+        { char: 'char_grandma', side: 'right', name: 'Бабушка Галя', text: 'Там вся наша жизнь, внученька. Фотографии, письма... и одна очень важная вещь.' },
+        { char: 'char_murzik',  side: 'left',  name: 'Мурзик',       text: 'Мррр... (Мурзик принюхивается к сундуку)' }
+    ],
+    210: [
+        { char: 'char_maxim',   side: 'left',  name: 'Максим',       text: 'Смотрите! Мурзик что-то нашёл под кроватью!' },
+        { char: 'char_anya',    side: 'left',  name: 'Аня',          text: 'Это она! Шкатулка!' },
+        { char: 'char_grandma', side: 'right', name: 'Бабушка Галя', text: 'Ну что, открываем? Ключик, не подведи...' },
+        { char: 'char_grandma', side: 'right', name: 'Бабушка Галя', text: 'щёлк... Ах вот ты где, моя молодость...' }
     ]
 };
+
+// Кастомные ключи localStorage для сцен, у которых числовой id уровня
+// пересекается между главами (напр. кухня 10 vs баня 110 не пересекаются,
+// но именование в задании отличается от дефолтного `after_${id}`)
+const STORY_KEYS = {
+    103: 'bath_after_3',
+    106: 'bath_after_6',
+    110: 'bath_after_10',
+    203: 'bedroom_after_3',
+    206: 'bedroom_after_6',
+    210: 'bedroom_after_10'
+};
+
+// Нативное соотношение сторон фоновой картинки уровня (1672×941)
+const LEVEL_BG_AR = 1672 / 941;
+
+// Видимый прямоугольник картинки уровня внутри game-area при object-fit: contain.
+// Возвращает {left, top, width, height, minDim} в пикселях относительно game-area.
+// ВСЕ координаты зон (доли 0..1) считаются относительно этого прямоугольника,
+// а не всего экрана — поэтому и клики, и dev-инструменты используют imageRect().
+function imageRect(area) {
+    const W = area.clientWidth  || area.offsetWidth  || 360;
+    const H = area.clientHeight || area.offsetHeight || 500;
+    let iw, ih;
+    if (W / H > LEVEL_BG_AR) {   // экран шире картинки → полосы слева/справа
+        ih = H; iw = H * LEVEL_BG_AR;
+    } else {                     // экран уже картинки → полосы сверху/снизу
+        iw = W; ih = W / LEVEL_BG_AR;
+    }
+    return {
+        left: (W - iw) / 2, top: (H - ih) / 2,
+        width: iw, height: ih,
+        minDim: Math.min(iw, ih)
+    };
+}
 
 // Достижения
 const ACHIEVEMENTS = [
@@ -210,28 +278,14 @@ function updateHUD() {
 
     const playBtn = document.getElementById('btn-play');
     if (playBtn) {
-        // Кнопка — картинка, управляем только pointer-events и прозрачностью
-        if (save.energy.current <= 0) {
-            playBtn.style.opacity        = '0.45';
-            playBtn.style.pointerEvents  = 'none';
-        } else {
-            playBtn.style.opacity        = '1';
-            playBtn.style.pointerEvents  = '';
-        }
+        // При нуле энергии слегка гасим кнопку, но оставляем кликабельной —
+        // на карте игрок увидит, что энергии нет, и сможет её купить
+        playBtn.style.opacity = save.energy.current <= 0 ? '0.7' : '1';
+        playBtn.style.pointerEvents = '';
     }
 }
 
 setInterval(updateHUD, 1000);
-
-// Кастомный курсор везде
-(function() {
-    const cur = document.getElementById('custom-cursor');
-    if (!cur) return;
-    document.addEventListener('mousemove', e => {
-        cur.style.left = e.clientX + 'px';
-        cur.style.top  = e.clientY + 'px';
-    });
-})();
 
 // =============================================
 // ИГРОВОЕ СОСТОЯНИЕ
@@ -257,10 +311,11 @@ const Game = {
         document.getElementById(id).classList.add('active');
         Music.forScreen(id);
         if (id !== 'screen-game' && typeof DevTools !== 'undefined') DevTools.hideZones();
+        if (id !== 'screen-game' && typeof ZoneEditor !== 'undefined' && ZoneEditor.active) ZoneEditor.disable();
         if (id !== 'screen-main' && typeof Profile !== 'undefined') Profile.hidePanel();
     },
 
-    showMain()         { this.showScreen('screen-main');         updateHUD(); Profile.showPanel(); },
+    showMain()         { this.stopTimer(); this.showScreen('screen-main'); updateHUD(); Profile.showPanel(); },
     showAchievements() { this.showScreen('screen-achievements'); this.renderAchievements(); },
     showSettings()     { this.showScreen('screen-settings');     this.updateSettingsUI(); },
     showShop()         { this.showScreen('screen-shop');         Shop.init(); updateHUD(); },
@@ -273,10 +328,14 @@ const Game = {
 
         const kitchenDone = Array.from({length: 10}, (_, i) => i + 1)
             .every(id => ((save.levels || {})[id] || {}).stars > 0);
+        const bathDone    = this._bathAllDone();
+        const bedroomDone = this._bedroomAllDone();
 
         const chapters = [
-            { name: 'Кухня бабушки', photo: 'photo_kitchen.png.png', done: kitchenDone },
-            ...Array.from({length: 9}, (_, i) => ({ name: `Глава ${i + 2}`, photo: null, done: false }))
+            { name: 'Кухня бабушки', photo: 'photo_kitchen.png.png',   done: kitchenDone },
+            { name: 'Баня',          photo: 'photo_bath.png.png',      done: bathDone },
+            { name: 'Спальня',       photo: 'photo_bedroom.png.png',   done: bedroomDone },
+            ...Array.from({length: 7}, (_, i) => ({ name: `Глава ${i + 4}`, photo: null, done: false }))
         ];
 
         chapters.forEach((ch, idx) => {
@@ -292,13 +351,31 @@ const Game = {
     },
 
     openAlbumLightbox(src, name) {
-        document.getElementById('album-lightbox-img').src = src;
+        const img = document.getElementById('album-lightbox-img');
+        img.src = src;
+        img.classList.remove('zoomed');
+        img.style.transformOrigin = 'center center';
         document.getElementById('album-lightbox-label').textContent = name;
         document.getElementById('album-lightbox').classList.remove('hidden');
     },
 
     closeAlbumLightbox() {
         document.getElementById('album-lightbox').classList.add('hidden');
+    },
+
+    toggleAlbumZoom(e) {
+        const img = document.getElementById('album-lightbox-img');
+        if (img.classList.contains('zoomed')) {
+            img.classList.remove('zoomed');
+            img.style.transformOrigin = 'center center';
+            return;
+        }
+        // Точка клика становится центром увеличения
+        const rect = img.getBoundingClientRect();
+        const ox = ((e.clientX - rect.left) / rect.width) * 100;
+        const oy = ((e.clientY - rect.top) / rect.height) * 100;
+        img.style.transformOrigin = `${ox}% ${oy}%`;
+        img.classList.add('zoomed');
     },
 
     showMap() {
@@ -313,9 +390,23 @@ const Game = {
             .every(id => (save.levels[id] || {}).completed);
     },
 
+    _bathAllDone() {
+        return Array.from({length: 10}, (_, i) => i + 101)
+            .every(id => ((save.levels[id] || {}).stars || 0) > 0);
+    },
+
+    _bedroomAllDone() {
+        return Array.from({length: 10}, (_, i) => i + 201)
+            .every(id => ((save.levels[id] || {}).stars || 0) > 0);
+    },
+
     selectChapter(name) {
         if (name === 'bath' && !this._kitchenAllDone()) {
             alert('Сначала пройди все уровни Кухни бабушки Гали!');
+            return;
+        }
+        if (name === 'bedroom' && !this._bathAllDone()) {
+            alert('Сначала пройди все уровни Бани!');
             return;
         }
         currentChapter = name;
@@ -330,12 +421,13 @@ const Game = {
         grid.innerHTML = '';
 
         const kitchenDone = this._kitchenAllDone();
+        const bathDone    = this._bathAllDone();
 
-        // Вкладки глав: kitchen и bath — интерактивны; остальные заблокированы
+        // Вкладки глав: kitchen, bath и bedroom — интерактивны; остальные заблокированы
         const tabChapters = [
             { id: 'kitchen', unlocked: true },
             { id: 'bath',    unlocked: kitchenDone },
-            { id: 'bedroom', unlocked: false },
+            { id: 'bedroom', unlocked: bathDone },
             { id: 'barn',    unlocked: false },
             { id: 'chicken', unlocked: false },
             { id: 'garden',  unlocked: false },
@@ -356,14 +448,17 @@ const Game = {
         if (currentChapter === 'bath') {
             if (bg) bg.className = 'bath-bg map-bg-blur';
             if (titleText) titleText.querySelector('textPath').textContent = 'Баня';
+        } else if (currentChapter === 'bedroom') {
+            if (bg) bg.className = 'bedroom-bg map-bg-blur';
+            if (titleText) titleText.querySelector('textPath').textContent = 'Спальня бабушки';
         } else {
             if (bg) bg.className = 'kitchen-bg map-bg-blur';
             if (titleText) titleText.querySelector('textPath').textContent = 'Кухня бабушки Гали';
         }
 
-        const levels = currentChapter === 'bath'
-            ? (levelsData.bath_levels || [])
-            : levelsData.levels;
+        const levels = currentChapter === 'bath'    ? (levelsData.bath_levels || [])
+                     : currentChapter === 'bedroom' ? (levelsData.bedroom_levels || [])
+                     : levelsData.levels;
 
         for (let r = 0; r < 5; r++) {
             const row = document.createElement('div');
@@ -373,10 +468,10 @@ const Game = {
                 const lvl = levels[r * 2 + c];
                 if (!lvl) continue;
 
-                // Блокировка: для бани — предыдущий уровень бани; уровень 1 доступен сразу (глава уже открыта)
+                // Блокировка: для доп. глав — предыдущий уровень той же главы; уровень 1 доступен сразу (глава уже открыта)
                 let prevDone;
                 let isChapterFirst = false;
-                if (currentChapter === 'bath') {
+                if (currentChapter !== 'kitchen') {
                     isChapterFirst = lvl.id === levels[0].id;
                     prevDone = isChapterFirst
                         ? true
@@ -391,7 +486,7 @@ const Game = {
                 const isLocked  = !prevDone;
                 const isDone    = lvlSave.completed;
                 const isCurrent = !isLocked && !isDone && !isEmpty;
-                const displayNum = currentChapter === 'bath' ? lvl.id - 100 : lvl.id;
+                const displayNum = currentChapter !== 'kitchen' ? lvl.id - (levels[0].id - 1) : lvl.id;
 
                 const cell = document.createElement('div');
                 cell.className = 'level-cell' +
@@ -442,11 +537,12 @@ const Game = {
 
     startLevel(levelId) {
         syncEnergy();
-        if (save.energy.current <= 0) { alert('Нет энергии! Она восстанавливается каждые 20 минут.'); return; }
+        if (save.energy.current <= 0) { alert('Нет энергии! +1 каждые 15 минут — или купи её за монеты на карте.'); return; }
         if (!spendEnergy()) return;
 
         currentLevel = levelsData.levels.find(l => l.id === levelId)
-                    || (levelsData.bath_levels || []).find(l => l.id === levelId);
+                    || (levelsData.bath_levels || []).find(l => l.id === levelId)
+                    || (levelsData.bedroom_levels || []).find(l => l.id === levelId);
         if (!currentLevel) return;
 
         gs = {
@@ -456,7 +552,8 @@ const Game = {
             total:       currentLevel.items.length,
             items:       currentLevel.items.map(id => ({
                              ...(levelsData.items.find(i => i.id === id)
-                              || levelsData.bath_items.find(i => i.id === id)),
+                              || (levelsData.bath_items || []).find(i => i.id === id)
+                              || (levelsData.bedroom_items || []).find(i => i.id === id)),
                              found: false
                          })),
             timerHandle: null,
@@ -473,7 +570,11 @@ const Game = {
         }
 
         const sceneBg = document.getElementById('game-scene-bg');
-        if (sceneBg) sceneBg.className = currentLevel.id >= 101 ? 'bath-bg' : 'kitchen-bg';
+        if (sceneBg) {
+            sceneBg.className = currentLevel.id >= 201 ? 'bedroom-bg'
+                               : currentLevel.id >= 101 ? 'bath-bg'
+                               : 'kitchen-bg';
+        }
 
         this.showScreen('screen-game');
         this.renderGame();
@@ -519,12 +620,22 @@ const Game = {
         const area   = document.getElementById('game-area');
         layer.innerHTML = '';
 
-        const minDim = Math.min(area.offsetWidth || 360, area.offsetHeight || 500);
+        // Совмещаем слой предметов с видимой картинкой (contain): проценты детей = доли картинки
+        const img = imageRect(area);
+        layer.style.left   = img.left   + 'px';
+        layer.style.top    = img.top    + 'px';
+        layer.style.width  = img.width  + 'px';
+        layer.style.height = img.height + 'px';
+        layer.style.right  = 'auto';
+        layer.style.bottom = 'auto';
+
+        const minDim = img.minDim;
 
         gs.items.forEach(it => {
             const zones = it.zones || [{ x: it.x, y: it.y, radius: it.radius || 0.06 }];
             zones.forEach((zone, i) => {
-                const sizePx = Math.max(48, zone.radius * minDim * 2);
+                const rBase  = zone.radius || zone.radiusX || (zone.width ? zone.width / 2 : 0.06);
+                const sizePx = Math.max(48, rBase * minDim * 2);
                 const el      = document.createElement('div');
                 el.className  = 'game-item';
                 el.id         = `gi-${it.id}-${i}`;
@@ -542,16 +653,25 @@ const Game = {
     handleClick(e) {
         const area   = document.getElementById('game-area');
         const rect   = area.getBoundingClientRect();
-        const px     = e.clientX - rect.left;
+        const px     = e.clientX - rect.left;   // относительно game-area — для визуальных эффектов
         const py     = e.clientY - rect.top;
 
         // Блокируем клики во время туториала
         if (Tutorial && Tutorial.active) return;
 
-        // Режим разработчика: фиксируем координаты и копируем в буфер обмена
+        // Редактор зон: игровые клики полностью отключены
+        if (typeof ZoneEditor !== 'undefined' && ZoneEditor.active) return;
+
+        // Координаты относительно ВИДИМОЙ картинки (contain)
+        const img = imageRect(area);
+        const ix  = px - img.left;
+        const iy  = py - img.top;
+        const IW  = img.width, IH = img.height, minDim = img.minDim;
+
+        // Режим разработчика: фиксируем координаты (в долях картинки) и копируем в буфер
         if (devMode) {
-            const rx = (px / rect.width).toFixed(3);
-            const ry = (py / rect.height).toFixed(3);
+            const rx = (ix / IW).toFixed(3);
+            const ry = (iy / IH).toFixed(3);
             const text = `"x": ${rx}, "y": ${ry}`;
             navigator.clipboard.writeText(text).catch(() => {});
             // Показываем подтверждение в панели
@@ -566,8 +686,6 @@ const Game = {
 
         if (gs.lives <= 0 || gs.timeLeft <= 0) return;
 
-        const minDim = Math.min(rect.width, rect.height);
-
         // Собираем все попавшие предметы, запоминаем минимальный размер совпавшей зоны
         let hit = null;
         let hitSize = Infinity;
@@ -578,21 +696,34 @@ const Game = {
                 let inside = false;
                 let size;
                 if (zone.shape === 'rect') {
-                    const rw  = zone.width * rect.width;
-                    const rh  = zone.square ? rw : zone.height * rect.height;
-                    const cx  = zone.x * rect.width  + rw / 2;
-                    const cy  = zone.y * rect.height + rh / 2;
-                    let lx = px - cx, ly = py - cy;
+                    const rw  = zone.width * IW;
+                    const rh  = zone.square ? rw : zone.height * IH;
+                    const cx  = zone.x * IW + rw / 2;
+                    const cy  = zone.y * IH + rh / 2;
+                    let lx = ix - cx, ly = iy - cy;
                     if (zone.rotation) {
                         const a = -zone.rotation * Math.PI / 180;
                         const cos = Math.cos(a), sin = Math.sin(a);
                         [lx, ly] = [lx * cos - ly * sin, lx * sin + ly * cos];
                     }
                     inside = Math.abs(lx) <= rw / 2 && Math.abs(ly) <= rh / 2;
-                    size = (rw / rect.width) * (rh / rect.height);
+                    size = (rw / IW) * (rh / IH);
+                } else if (zone.radiusX) {
+                    // Овал: radiusX / radiusY — полуоси в долях minDim, rotation в градусах
+                    let dx = ix - zone.x * IW;
+                    let dy = iy - zone.y * IH;
+                    if (zone.rotation) {
+                        const a = -zone.rotation * Math.PI / 180;
+                        const cos = Math.cos(a), sin = Math.sin(a);
+                        [dx, dy] = [dx * cos - dy * sin, dx * sin + dy * cos];
+                    }
+                    const erx = zone.radiusX * minDim;
+                    const ery = zone.radiusY * minDim;
+                    inside = (dx * dx) / (erx * erx) + (dy * dy) / (ery * ery) <= 1;
+                    size = zone.radiusX * zone.radiusY;
                 } else {
-                    const dx = px - zone.x * rect.width;
-                    const dy = py - zone.y * rect.height;
+                    const dx = ix - zone.x * IW;
+                    const dy = iy - zone.y * IH;
                     inside = Math.sqrt(dx * dx + dy * dy) <= zone.radius * minDim;
                     size = zone.radius * zone.radius; // π сокращается при сравнении
                 }
@@ -628,7 +759,10 @@ const Game = {
         save.stats.totalFound++;
         persist();
 
-        if (gs.found >= gs.total) setTimeout(() => this.winLevel(), 500);
+        if (gs.found >= gs.total) {
+            this.stopTimer(); // гасим НЕМЕДЛЕННО, до задержки
+            setTimeout(() => this.winLevel(), 500);
+        }
     },
 
     spawnFlyout(item) {
@@ -697,15 +831,19 @@ const Game = {
     // ----- Таймер -----
 
     startTimer() {
-        clearInterval(gs.timerHandle);
+        clearInterval(gs.timerHandle); // очищаем старый интервал если уровень перезапущен
         gs.timerHandle = setInterval(() => {
+            if (!gs.timerHandle) return; // уже остановлен (нашли последний предмет)
             gs.timeLeft--;
             this.refreshTimer();
-            if (gs.timeLeft <= 0) { clearInterval(gs.timerHandle); this.loseLevel('time'); }
+            if (gs.timeLeft <= 0) {
+                this.stopTimer();
+                this.loseLevel('time');
+            }
         }, 1000);
     },
 
-    stopTimer() { clearInterval(gs.timerHandle); gs.timerHandle = null; },
+    stopTimer() { if (gs) { clearInterval(gs.timerHandle); gs.timerHandle = null; } },
 
     // ----- Победа / Поражение -----
 
@@ -762,22 +900,27 @@ const Game = {
             }
         }
 
-        // Анимация выдачи фотокарточки — только при первом прохождении уровня 10
+        // Анимация выдачи фотокарточки — только при первом прохождении последнего
+        // уровня главы (не повторяется при повторном прохождении)
         if (win && currentLevel.id === 10 && !(save.chapters && save.chapters.kitchen && save.chapters.kitchen.completed)) {
-            setTimeout(() => Game.showPhotoAward(), 1500);
+            setTimeout(() => Game.showPhotoAward('kitchen', 'photo_kitchen.png', 'Кухня бабушки Гали'), 1500);
+        } else if (win && currentLevel.id === 110 && !(save.chapters && save.chapters.bath && save.chapters.bath.completed)) {
+            setTimeout(() => Game.showPhotoAward('bath', 'photo_bath.png', 'Баня'), 1500);
         }
     },
 
-    showPhotoAward() {
+    showPhotoAward(chapterId, photoFile, label) {
         const overlay = document.getElementById('photo-award-overlay');
         const wrap    = document.getElementById('photo-award-wrap');
         const hint    = document.getElementById('photo-award-album-hint');
+        const sub     = document.querySelector('.photo-award-sub');
 
         // Сбрасываем состояние wrap и hint перед показом
         wrap.classList.remove('fly-away');
         hint.classList.remove('glow-hint');
 
-        document.getElementById('photo-award-img').src = 'assets/photo_kitchen.png.png';
+        document.getElementById('photo-award-img').src = `assets/${photoFile}.png`;
+        if (sub) sub.textContent = label;
         overlay.classList.remove('hidden', 'fade-out');
 
         // Небольшая задержка чтобы transition успел сработать
@@ -799,9 +942,9 @@ const Game = {
                     overlay.classList.add('hidden');
                     overlay.classList.remove('fade-out');
 
-                    // Сохраняем получение карточки
+                    // Сохраняем получение карточки — анимация больше не повторится
                     if (!save.chapters) save.chapters = {};
-                    save.chapters.kitchen = { completed: true, photo: 'photo_kitchen.png' };
+                    save.chapters[chapterId] = { completed: true, photo: photoFile };
                     persist();
                 }, 600);
             }, 1000);
@@ -811,7 +954,7 @@ const Game = {
     nextLevel() {
         const id = currentLevel.id;
         if (STORY_SCENES[id]) {
-            const key = `after_${id}`;
+            const key = STORY_KEYS[id] || `after_${id}`;
             if (!(save.novel_shown || {})[key]) {
                 if (!save.novel_shown) save.novel_shown = {};
                 save.novel_shown[key] = true;
@@ -1491,22 +1634,18 @@ document.addEventListener('keydown', e => {
     Game.storyAdvance();
 });
 
-// Клавиша E — мгновенное восстановление энергии (только для тестирования)
+// Клавиша E — мгновенное восстановление энергии (только при включённом дев-режиме)
 document.addEventListener('keydown', e => {
     if (e.key !== 'e' && e.key !== 'E') return;
+    if (typeof DevTools === 'undefined' || !DevTools.enabled) return;
+    if (typeof ZoneEditor !== 'undefined' && ZoneEditor.active) return; // E занята поворотом зоны
+    const el = document.activeElement;
+    if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) return;
     save.energy.current    = ENERGY_MAX;
     save.energy.lastUpdate = Date.now();
     persist();
     updateHUD();
     console.log('%c[DEV] Энергия восстановлена до максимума', 'color:lime; font-weight:bold');
-});
-
-// Переключение по D
-document.addEventListener('keydown', e => {
-    if (e.key !== 'd' && e.key !== 'D') return;
-    devMode = !devMode;
-    const panel = getDevPanel();
-    panel.style.display = devMode ? '' : 'none';
 });
 
 // Обновляем координаты при движении мыши (в реальном времени)
@@ -1515,8 +1654,10 @@ document.addEventListener('mousemove', e => {
     const area = document.getElementById('game-area');
     if (!area) return;
     const rect = area.getBoundingClientRect();
-    const rx = ((e.clientX - rect.left) / rect.width).toFixed(3);
-    const ry = ((e.clientY - rect.top)  / rect.height).toFixed(3);
+    const img  = imageRect(area);
+    // Координаты в долях КАРТИНКИ (0..1), а не всего экрана
+    const rx = (((e.clientX - rect.left) - img.left) / img.width ).toFixed(3);
+    const ry = (((e.clientY - rect.top)  - img.top)  / img.height).toFixed(3);
     const xEl = document.getElementById('dev-x');
     const yEl = document.getElementById('dev-y');
     if (xEl) xEl.textContent = `x: ${rx}`;
@@ -1530,7 +1671,7 @@ document.addEventListener('mousemove', e => {
 const Music = (() => {
     const TRACKS = {
         main: 'assets/Zvonkiy_ruchey.mp3',
-        game: 'assets/Zvonkiy_ruchey (1).mp3'
+        game: 'assets/music_game.mp3'
     };
     const VOL_DEFAULT = 0.08;
     let VOL          = VOL_DEFAULT;
@@ -1541,32 +1682,48 @@ const Music = (() => {
     let _switchToken = 0;      // защита от гонки при быстрых переходах
     const _howls     = {};
 
-    function _mk(src) {
-        return new Howl({ src: [src], loop: true, volume: 0,
-                          html5: true /* избегаем задержки декодирования */ });
+    function _mk(name, src) {
+        return new Howl({
+            src: [src], loop: true, volume: 0,
+            html5: true, /* избегаем задержки декодирования */
+            onloaderror: (id, err) => console.error(`[Music] Ошибка загрузки "${src}":`, err),
+            onplayerror: (id, err) => {
+                console.error(`[Music] Ошибка воспроизведения "${src}":`, err);
+                // Браузер заблокировал звук — повторим после разблокировки аудио
+                _howls[name].once('unlock', () => {
+                    if (_enabled && _active === name) _howls[name].play();
+                });
+            }
+        });
     }
 
     function _startTrack(name, token) {
         if (token !== _switchToken) return;   // устарело — выходим
         const h = _howls[name];
+        h.off('fade');                        // снимаем висящие обработчики прошлых переходов
         h.volume(0);
         if (!h.playing()) h.play();
         h.fade(0, VOL, 800);
     }
 
     function _switchTo(name) {
-        if (!_unlocked || !_enabled) { _want = name; return; }
-        if (_active === name) return;
+        _want = name;
+        if (!_unlocked || !_enabled) return;
+        // Уже играет нужный трек — ничего не делаем (не перезапускаем)
+        if (_active === name && _howls[name] && _howls[name].playing()) return;
 
         const prev  = _active;
         _active     = name;
         const token = ++_switchToken;
 
-        if (prev && _howls[prev] && _howls[prev].playing()) {
+        if (prev && prev !== name && _howls[prev] && _howls[prev].playing()) {
             // Fade out старого → после завершения стартуем новый
-            _howls[prev].fade(_howls[prev].volume(), 0, 500);
-            _howls[prev].once('fade', () => {
-                _howls[prev].stop();
+            const ph = _howls[prev];
+            ph.off('fade');
+            ph.fade(ph.volume(), 0, 500);
+            ph.once('fade', () => {
+                if (token !== _switchToken) return;  // переход устарел — не трогаем
+                ph.stop();
                 _startTrack(name, token);
             });
         } else {
@@ -1576,8 +1733,8 @@ const Music = (() => {
 
     return {
         init() {
-            _howls.main = _mk(TRACKS.main);
-            _howls.game = _mk(TRACKS.game);
+            _howls.main = _mk('main', TRACKS.main);
+            _howls.game = _mk('game', TRACKS.game);
 
             const stored = localStorage.getItem('music_enabled');
             _enabled = stored === null ? save.settings.music : stored === 'true';
@@ -1597,9 +1754,9 @@ const Music = (() => {
 
         forScreen(screenId) {
             if (screenId === 'screen-main' || screenId === 'screen-map') {
-                _want = 'main'; _switchTo('main');
+                _switchTo('main');
             } else if (screenId === 'screen-game') {
-                _want = 'game'; _switchTo('game');
+                _switchTo('game');
             }
             // Прочие экраны — музыка не меняется
         },
@@ -1617,10 +1774,12 @@ const Music = (() => {
             save.settings.music = false;
             localStorage.setItem('music_enabled', 'false');
             persist();
+            _switchToken++;  // отменяем все незавершённые переходы
             Object.values(_howls).forEach(h => {
+                h.off('fade');
                 if (h.playing()) {
                     h.fade(h.volume(), 0, 500);
-                    h.once('fade', () => h.stop());
+                    h.once('fade', () => { if (!_enabled) h.stop(); });
                 }
             });
             _active = null;
@@ -1830,7 +1989,7 @@ const Profile = (() => {
 
     function _validate() {
         const nick = (document.getElementById('profile-nick-input')?.value || '').trim();
-        const ok = nick.length >= 3
+        const ok = nick.length >= 3 && nick.length <= 12
             && /^[а-яёА-ЯЁa-zA-Z0-9]+$/.test(nick)
             && _setupAvatar !== null;
         const btn = document.getElementById('profile-start-btn');
@@ -1978,25 +2137,90 @@ init();
 
 // ===== DEV TOOLS =====
 const DevTools = {
-    active: false,
+    enabled: false,      // Ctrl+Shift+D — показ/скрытие кнопки DEV
+    panelOpen: false,
     zonesVisible: false,
+    coordsOn: false,
 
-    toggle() {
-        this.active = !this.active;
-        const panel = document.getElementById('dev-panel');
-        if (panel) panel.style.display = this.active ? 'flex' : 'none';
-        if (!this.active && this.zonesVisible) this.hideZones();
+    toggleEnabled() {
+        this.enabled = !this.enabled;
+        const fab = document.getElementById('dev-fab');
+        if (fab) fab.classList.toggle('hidden', !this.enabled);
+        if (!this.enabled) {
+            // Выключаем все дев-функции
+            this.closePanel();
+            this.setZones(false);
+            this.setCoords(false);
+            if (typeof ZoneEditor !== 'undefined' && ZoneEditor.active) ZoneEditor.disable();
+            const z = document.getElementById('dev-toggle-zones');
+            const c = document.getElementById('dev-toggle-coords');
+            if (z) z.checked = false;
+            if (c) c.checked = false;
+        }
     },
 
-    toggleZones() {
-        this.zonesVisible ? this.hideZones() : this.drawZones();
+    togglePanel() { this.panelOpen ? this.closePanel() : this.openPanel(); },
+    openPanel()   { this.panelOpen = true;  document.getElementById('dev-sidebar').classList.add('open'); },
+    closePanel()  { this.panelOpen = false; document.getElementById('dev-sidebar').classList.remove('open'); },
+
+    // ----- Переключатели -----
+
+    setZones(on) {
+        if (on && typeof ZoneEditor !== 'undefined' && ZoneEditor.active) ZoneEditor.disable();
+        on ? this.drawZones() : this.hideZones();
+    },
+
+    setCoords(on) {
+        this.coordsOn = on;
+        devMode = on;  // при devMode клики по полю копируют координаты и не считаются игровыми
+        getDevPanel().style.display = on ? '' : 'none';
+    },
+
+    // ----- Кнопки действий -----
+
+    _flash(btn) {
+        if (!btn) return;
+        btn.classList.remove('flash');
+        void btn.offsetWidth;  // перезапуск анимации
+        btn.classList.add('flash');
+    },
+
+    resetTimer(btn) {
+        if (gs && currentLevel) {
+            gs.timeLeft = currentLevel.timer || 420;
+            Game.refreshTimer();
+        }
+        this._flash(btn);
+    },
+
+    restoreLives(btn) {
+        if (gs) { gs.lives = 3; Game.refreshLives(); }
+        this._flash(btn);
+    },
+
+    restoreEnergy(btn) {
+        save.energy.current = ENERGY_MAX;
+        save.energy.lastUpdate = Date.now();
+        persist(); updateHUD();
+        this._flash(btn);
+    },
+
+    addCoins(btn)  { save.coins += 999; persist(); updateHUD(); this._flash(btn); },
+    addMalina(btn) { save.malina = (save.malina || 0) + 999; persist(); updateHUD(); this._flash(btn); },
+
+    resetGame() {
+        if (confirm('Точно сбросить всё?')) {
+            localStorage.clear();
+            location.reload();
+        }
     },
 
     drawZones() {
-        if (!gs || !gs.items || !gs.items.length) return;
+        const cb = document.getElementById('dev-toggle-zones');
+        if (!gs || !gs.items || !gs.items.length) { if (cb) cb.checked = false; return; }
         const canvas = document.getElementById('dev-zones-canvas');
         const area   = document.getElementById('game-area');
-        if (!canvas || !area) return;
+        if (!canvas || !area) { if (cb) cb.checked = false; return; }
 
         const rect = area.getBoundingClientRect();
         canvas.width  = rect.width;
@@ -2006,7 +2230,9 @@ const DevTools = {
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        const minDim = Math.min(rect.width, rect.height);
+        // Все зоны — в системе координат ВИДИМОЙ картинки (contain)
+        const img = imageRect(area);
+        const IW = img.width, IH = img.height, OX = img.left, OY = img.top, minDim = img.minDim;
 
         gs.items.forEach(item => {
             const zones = item.zones || [{ x: item.x, y: item.y, radius: item.radius || 0.06 }];
@@ -2017,10 +2243,10 @@ const DevTools = {
 
                 let labelX, labelY;
                 if (zone.shape === 'rect') {
-                    const rw  = zone.width  * rect.width;
-                    const rh  = zone.square ? rw : zone.height * rect.height;
-                    const cx  = zone.x * rect.width  + rw / 2;
-                    const cy  = zone.y * rect.height + rh / 2;
+                    const rw  = zone.width  * IW;
+                    const rh  = zone.square ? rw : zone.height * IH;
+                    const cx  = OX + zone.x * IW + rw / 2;
+                    const cy  = OY + zone.y * IH + rh / 2;
                     ctx.save();
                     ctx.translate(cx, cy);
                     if (zone.rotation) ctx.rotate(zone.rotation * Math.PI / 180);
@@ -2031,9 +2257,19 @@ const DevTools = {
                     ctx.restore();
                     labelX = cx;
                     labelY = cy;
+                } else if (zone.radiusX) {
+                    const cx = OX + zone.x * IW;
+                    const cy = OY + zone.y * IH;
+                    const rot = (zone.rotation || 0) * Math.PI / 180;
+                    ctx.beginPath();
+                    ctx.ellipse(cx, cy, zone.radiusX * minDim, zone.radiusY * minDim, rot, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    labelX = cx;
+                    labelY = cy;
                 } else {
-                    const cx = zone.x * rect.width;
-                    const cy = zone.y * rect.height;
+                    const cx = OX + zone.x * IW;
+                    const cy = OY + zone.y * IH;
                     const r  = zone.radius * minDim;
                     ctx.beginPath();
                     ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -2054,24 +2290,379 @@ const DevTools = {
             });
         });
 
-        const btn = document.getElementById('dev-btn-zones');
-        if (btn) btn.style.background = 'rgba(255,80,80,0.4)';
         this.zonesVisible = true;
+        if (cb) cb.checked = true;
     },
 
     hideZones() {
         const canvas = document.getElementById('dev-zones-canvas');
         if (canvas) canvas.style.display = 'none';
-        const btn = document.getElementById('dev-btn-zones');
-        if (btn) btn.style.background = 'rgba(255,255,255,0.15)';
         this.zonesVisible = false;
+        const cb = document.getElementById('dev-toggle-zones');
+        if (cb) cb.checked = false;
     }
 };
 
-document.addEventListener('keydown', e => {
-    if (e.code === 'KeyD' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        const active = document.activeElement;
-        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
-        DevTools.toggle();
+// =============================================
+// РЕДАКТОР ЗОН (дев-панель)
+// =============================================
+// Работает с временной копией зон — levels.json не меняется до ручного
+// применения JSON, скопированного кнопкой «Сохранить зоны».
+
+const ZoneEditor = {
+    active: false,
+    entries: [],       // { id, name, zi, zone: копия, el }
+    selectedEl: null,
+
+    setActive(on) { on ? this.enable() : this.disable(); },
+
+    enable() {
+        const cb = document.getElementById('dev-toggle-editor');
+        if (!gs || !gs.items || !gs.items.length) { if (cb) cb.checked = false; return; }
+        this.active = true;
+        DevTools.hideZones();  // канвас показа зон дублировал бы редактор
+
+        // Рабочая копия всех зон уровня
+        this.entries = [];
+        gs.items.forEach(item => {
+            (item.zones || []).forEach((z, zi) => {
+                this.entries.push({ id: item.id, name: item.name, zi, zone: JSON.parse(JSON.stringify(z)) });
+            });
+        });
+        this._render();
+        const btn = document.getElementById('dev-btn-save-zones');
+        if (btn) btn.disabled = false;
+    },
+
+    disable() {
+        this.active = false;
+        const layer = document.getElementById('zone-editor-layer');
+        if (layer) layer.remove();
+        this.entries = [];
+        this.selectedEl = null;
+        const btn = document.getElementById('dev-btn-save-zones');
+        if (btn) btn.disabled = true;
+        const info = document.getElementById('dev-zone-info');
+        if (info) info.style.display = 'none';
+        const cb = document.getElementById('dev-toggle-editor');
+        if (cb) cb.checked = false;
+    },
+
+    _area() { return document.getElementById('game-area'); },
+
+    _render() {
+        const area = this._area();
+        if (!area) return;
+        const old = document.getElementById('zone-editor-layer');
+        if (old) old.remove();
+        const layer = document.createElement('div');
+        layer.id = 'zone-editor-layer';
+        area.appendChild(layer);
+        this.entries.forEach(en => {
+            const el = document.createElement('div');
+            el.className = 'ze-zone';
+            el.innerHTML = `<span class="ze-label">${en.name}</span>`;
+            layer.appendChild(el);
+            en.el = el;
+            this._place(en);
+            this._attachDrag(en);
+            const shape = this._shapeOf(en.zone);
+            if (shape === 'rect')    this._makeRectHandles(en);
+            if (shape === 'ellipse') this._makeEllipseHandles(en);
+            if (shape !== 'rect')    this._attachWheel(en);
+            if (shape !== 'circle')  this._makeRotateHandle(en);
+        });
+    },
+
+    _shapeOf(z) {
+        if (z.shape === 'rect') return 'rect';
+        if (z.shape === 'ellipse' || z.radiusX) return 'ellipse';
+        return 'circle';
+    },
+
+    // Геометрия зоны: центр/полуоси/поворот в системе координат КАРТИНКИ (contain).
+    // cx/cy — относительно левого-верхнего угла картинки; offX/offY — смещение картинки
+    // внутри game-area (добавляется только в _place при позиционировании div).
+    _dims(z) {
+        const img = imageRect(this._area());
+        const W = img.width, H = img.height, minDim = img.minDim;
+        const offX = img.left, offY = img.top;
+        const shape = this._shapeOf(z);
+        if (shape === 'rect') {
+            const w = z.width * W;
+            const h = z.square ? w : z.height * H;
+            return { W, H, minDim, offX, offY, cx: z.x * W + w / 2, cy: z.y * H + h / 2, hw: w / 2, hh: h / 2, rot: z.rotation || 0 };
+        }
+        if (shape === 'ellipse') {
+            return { W, H, minDim, offX, offY, cx: z.x * W, cy: z.y * H, hw: z.radiusX * minDim, hh: z.radiusY * minDim, rot: z.rotation || 0 };
+        }
+        const r = z.radius * minDim;
+        return { W, H, minDim, offX, offY, cx: z.x * W, cy: z.y * H, hw: r, hh: r, rot: 0 };
+    },
+
+    // Позиционирование div по данным зоны (доли картинки → пиксели game-area)
+    _place(en) {
+        const z = en.zone, el = en.el;
+        const d = this._dims(z);
+        el.style.left   = (d.offX + d.cx - d.hw) + 'px';
+        el.style.top    = (d.offY + d.cy - d.hh) + 'px';
+        el.style.width  = d.hw * 2 + 'px';
+        el.style.height = d.hh * 2 + 'px';
+        el.style.borderRadius = this._shapeOf(z) === 'rect' ? '0' : '50%';
+        el.style.transform = d.rot ? `rotate(${d.rot}deg)` : '';
+    },
+
+    _attachDrag(en) {
+        en.el.addEventListener('mousedown', e => {
+            if (e.target.classList.contains('ze-handle')) return;
+            e.preventDefault(); e.stopPropagation();
+            const img = imageRect(this._area());
+            const W = img.width, H = img.height;   // доли считаем от картинки
+            const sx = e.clientX, sy = e.clientY;
+            const zx = en.zone.x, zy = en.zone.y;
+            let moved = false;
+            en.el.classList.add('dragging');
+            const onMove = ev => {
+                if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) > 3) moved = true;
+                en.zone.x = +(zx + (ev.clientX - sx) / W).toFixed(3);
+                en.zone.y = +(zy + (ev.clientY - sy) / H).toFixed(3);
+                this._place(en);
+                if (this.selectedEl === en.el) this._showInfo(en);
+            };
+            const onUp = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+                en.el.classList.remove('dragging');
+                if (!moved) this._select(en);  // клик без движения = выбор
+            };
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        });
+    },
+
+    // Колёсико — размер круга/овала
+    _attachWheel(en) {
+        en.el.addEventListener('wheel', e => {
+            e.preventDefault();
+            const step = e.deltaY < 0 ? 0.005 : -0.005;
+            const z = en.zone;
+            if (z.radiusX) {
+                z.radiusX = +Math.max(0.01, z.radiusX + step).toFixed(3);
+                z.radiusY = +Math.max(0.01, z.radiusY + step).toFixed(3);
+            } else {
+                z.radius = +Math.max(0.01, z.radius + step).toFixed(3);
+            }
+            this._place(en);
+            if (this.selectedEl === en.el) this._showInfo(en);
+        }, { passive: false });
+    },
+
+    // Смещение мыши в локальных осях зоны (с учётом её поворота)
+    _localDelta(ev, sx, sy, rot) {
+        const dx = ev.clientX - sx, dy = ev.clientY - sy;
+        if (!rot) return { dx, dy };
+        const a = -rot * Math.PI / 180;
+        const cos = Math.cos(a), sin = Math.sin(a);
+        return { dx: dx * cos - dy * sin, dy: dx * sin + dy * cos };
+    },
+
+    _dragHandle(handleEl, onStart, onDelta) {
+        handleEl.addEventListener('mousedown', e => {
+            e.preventDefault(); e.stopPropagation();
+            const state = onStart();
+            const sx = e.clientX, sy = e.clientY;
+            const onMove = ev => onDelta(ev, sx, sy, state);
+            const onUp = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+            };
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        });
+    },
+
+    // Прямоугольник: 4 угла + 4 стороны
+    _makeRectHandles(en) {
+        ['nw', 'ne', 'sw', 'se', 'n', 's', 'e', 'w'].forEach(dir => {
+            const h = document.createElement('div');
+            h.className = 'ze-handle ze-' + dir;
+            en.el.appendChild(h);
+            this._dragHandle(h,
+                () => {
+                    const d = this._dims(en.zone);
+                    // при первом растяжении квадрат превращается в явный rect
+                    if (en.zone.square) { en.zone.height = +(d.hh * 2 / d.H).toFixed(3); delete en.zone.square; }
+                    return { swPx: d.hw * 2, shPx: d.hh * 2, sxPx: d.cx - d.hw, syPx: d.cy - d.hh, rot: d.rot, W: d.W, H: d.H };
+                },
+                (ev, sx, sy, s) => {
+                    const { dx, dy } = this._localDelta(ev, sx, sy, s.rot);
+                    const z = en.zone;
+                    let wPx = s.swPx, hPx = s.shPx, xPx = s.sxPx, yPx = s.syPx;
+                    if (dir.includes('e')) wPx = s.swPx + dx;
+                    if (dir.includes('w')) { wPx = s.swPx - dx; xPx = s.sxPx + dx; }
+                    if (dir.includes('s')) hPx = s.shPx + dy;
+                    if (dir.includes('n')) { hPx = s.shPx - dy; yPx = s.syPx + dy; }
+                    if (wPx < 8) { wPx = 8; }
+                    if (hPx < 8) { hPx = 8; }
+                    z.width  = +(wPx / s.W).toFixed(3);
+                    z.height = +(hPx / s.H).toFixed(3);
+                    z.x      = +(xPx / s.W).toFixed(3);
+                    z.y      = +(yPx / s.H).toFixed(3);
+                    this._place(en);
+                    if (this.selectedEl === en.el) this._showInfo(en);
+                });
+        });
+    },
+
+    // Овал: маркеры по горизонтали (radiusX) и вертикали (radiusY)
+    _makeEllipseHandles(en) {
+        ['n', 's', 'e', 'w'].forEach(dir => {
+            const h = document.createElement('div');
+            h.className = 'ze-handle ze-' + dir;
+            en.el.appendChild(h);
+            this._dragHandle(h,
+                () => {
+                    const d = this._dims(en.zone);
+                    return { srx: en.zone.radiusX, sry: en.zone.radiusY, rot: d.rot, minDim: d.minDim };
+                },
+                (ev, sx, sy, s) => {
+                    const { dx, dy } = this._localDelta(ev, sx, sy, s.rot);
+                    const z = en.zone;
+                    if (dir === 'e') z.radiusX = +Math.max(0.01, s.srx + dx / s.minDim).toFixed(3);
+                    if (dir === 'w') z.radiusX = +Math.max(0.01, s.srx - dx / s.minDim).toFixed(3);
+                    if (dir === 's') z.radiusY = +Math.max(0.01, s.sry + dy / s.minDim).toFixed(3);
+                    if (dir === 'n') z.radiusY = +Math.max(0.01, s.sry - dy / s.minDim).toFixed(3);
+                    this._place(en);
+                    if (this.selectedEl === en.el) this._showInfo(en);
+                });
+        });
+    },
+
+    // Маркер вращения — кружок на ножке сверху (виден у выбранной зоны)
+    _makeRotateHandle(en) {
+        const h = document.createElement('div');
+        h.className = 'ze-rotate';
+        en.el.appendChild(h);
+        this._dragHandle(h,
+            () => {
+                const area = this._area();
+                const ar = area.getBoundingClientRect();
+                return { ar };
+            },
+            (ev, sx, sy, s) => {
+                const d = this._dims(en.zone);
+                // Переводим мышь из координат game-area в координаты картинки
+                const mx = ev.clientX - s.ar.left - d.offX, my = ev.clientY - s.ar.top - d.offY;
+                let ang = Math.atan2(my - d.cy, mx - d.cx) * 180 / Math.PI + 90;
+                en.zone.rotation = this._normDeg(Math.round(ang));
+                this._place(en);
+                if (this.selectedEl === en.el) this._showInfo(en);
+            });
+    },
+
+    _normDeg(deg) {
+        return ((deg + 180) % 360 + 360) % 360 - 180;
+    },
+
+    // Смена формы выбранной зоны с сохранением габаритов
+    setShape(shape) {
+        const en = this.entries.find(x => x.el === this.selectedEl);
+        if (!en || this._shapeOf(en.zone) === shape) return;
+        const d = this._dims(en.zone);
+        const r3 = v => +v.toFixed(3);
+        if (shape === 'circle') {
+            en.zone = { x: r3(d.cx / d.W), y: r3(d.cy / d.H), radius: r3((d.hw + d.hh) / 2 / d.minDim), shape: 'circle' };
+        } else if (shape === 'ellipse') {
+            en.zone = { x: r3(d.cx / d.W), y: r3(d.cy / d.H), radiusX: r3(d.hw / d.minDim), radiusY: r3(d.hh / d.minDim), shape: 'ellipse', rotation: d.rot };
+        } else {
+            en.zone = { x: r3((d.cx - d.hw) / d.W), y: r3((d.cy - d.hh) / d.H), width: r3(d.hw * 2 / d.W), height: r3(d.hh * 2 / d.H), shape: 'rect', rotation: d.rot };
+        }
+        // Полная перерисовка (набор маркеров зависит от формы) + восстановление выбора
+        const idx = this.entries.indexOf(en);
+        this._render();
+        this._select(this.entries[idx]);
+    },
+
+    _select(en) {
+        if (this.selectedEl) this.selectedEl.classList.remove('selected');
+        this.selectedEl = en.el;
+        en.el.classList.add('selected');
+        this._showInfo(en);
+    },
+
+    _showInfo(en) {
+        const info = document.getElementById('dev-zone-info');
+        if (!info) return;
+        const z = en.zone;
+        const shape = this._shapeOf(z);
+        let dims;
+        if (shape === 'rect') {
+            dims = `w: ${z.width}${z.square ? ' (квадрат)' : ', h: ' + z.height}` +
+                   (z.rotation ? `, rot: ${z.rotation}°` : '');
+        } else if (shape === 'ellipse') {
+            dims = `rx: ${z.radiusX}, ry: ${z.radiusY}` + (z.rotation ? `, rot: ${z.rotation}°` : '');
+        } else {
+            dims = `r: ${z.radius}`;
+        }
+        const btn = (s, icon) =>
+            `<button class="dev-shape-btn${shape === s ? ' active' : ''}" onclick="ZoneEditor.setShape('${s}')">${icon}</button>`;
+        info.style.display = '';
+        info.innerHTML =
+            `<b>${en.name}</b> [зона ${en.zi + 1}]<br>x: ${z.x}, y: ${z.y}<br>${dims}` +
+            `<div class="dev-shape-btns">${btn('circle', '⭕ Круг')}${btn('ellipse', '⬭ Овал')}${btn('rect', '⬜ Прямоуг.')}</div>` +
+            `<div class="dev-shape-hint">Q / E — поворот на 5°</div>`;
+    },
+
+    _toast(msg) {
+        let t = document.getElementById('ze-toast');
+        if (!t) {
+            t = document.createElement('div');
+            t.id = 'ze-toast';
+            document.body.appendChild(t);
+        }
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._hide);
+        t._hide = setTimeout(() => t.classList.remove('show'), 1800);
+    },
+
+    saveZones(btn) {
+        if (!this.active || !this.entries.length) return;
+        const byId = {};
+        const order = [];
+        this.entries.forEach(en => {
+            if (!byId[en.id]) { byId[en.id] = { id: en.id, name: en.name, zones: [] }; order.push(en.id); }
+            const z = { ...en.zone };
+            z.shape = this._shapeOf(z);            // shape указываем явно
+            if (z.shape !== 'circle' && z.rotation === undefined) z.rotation = 0;
+            byId[en.id].zones.push(z);
+        });
+        const json = JSON.stringify(order.map(id => byId[id]), null, 2);
+        console.log('%c[ZoneEditor] Зоны текущего уровня:', 'color:#ffd700;font-weight:bold');
+        console.log(json);
+        navigator.clipboard.writeText(json).catch(err => console.error('[ZoneEditor] Буфер обмена:', err));
+        this._toast('JSON скопирован в буфер!');
+        if (typeof DevTools !== 'undefined') DevTools._flash(btn);
     }
+};
+
+// Ctrl+Shift+D — включение/выключение дев-режима (кнопка DEV внизу экрана)
+document.addEventListener('keydown', e => {
+    if (e.code === 'KeyD' && e.ctrlKey && e.shiftKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        DevTools.toggleEnabled();
+    }
+});
+
+// Q / E — поворот выбранной зоны в редакторе на 5°
+document.addEventListener('keydown', e => {
+    if (!ZoneEditor.active || !ZoneEditor.selectedEl) return;
+    if (e.code !== 'KeyQ' && e.code !== 'KeyE') return;
+    const en = ZoneEditor.entries.find(x => x.el === ZoneEditor.selectedEl);
+    if (!en || ZoneEditor._shapeOf(en.zone) === 'circle') return;
+    e.preventDefault();
+    const step = e.code === 'KeyQ' ? -5 : 5;
+    en.zone.rotation = ZoneEditor._normDeg((en.zone.rotation || 0) + step);
+    ZoneEditor._place(en);
+    ZoneEditor._showInfo(en);
 });

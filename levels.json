@@ -55,226 +55,229 @@
     {
       "id": "pech",
       "name": "Печь",
-      "zones": [{"x": 0.067, "y": 0.480, "radius": 0.30}]
+      "zones": [{"x": -0.022, "y": 0.034, "width": 0.202, "height": 0.761, "shape": "rect", "rotation": -5}]
     },
     {
       "id": "holodilnik",
       "name": "Холодильник",
-      "zones": [{"x": 0.813, "y": 0.620, "radius": 0.225}]
+      "zones": [{"x": 0.749, "y": 0.419, "width": 0.227, "height": 0.516, "shape": "rect", "rotation": 5}]
     },
     {
       "id": "okno",
       "name": "Окно",
-      "zones": [{"x": 0.742, "y": 0.260, "radius": 0.16}]
+      "zones": [{"x": 0.681, "y": 0.104, "width": 0.144, "height": 0.359, "shape": "rect", "rotation": 2}]
     },
     {
       "id": "drova",
       "name": "Поленница дров",
-      "zones": [{"x": 0.076, "y": 0.754, "radius": 0.07}]
+      "zones": [{"x": 0.076, "y": 0.706, "radiusX": 0.102, "radiusY": 0.063, "shape": "ellipse", "rotation": -22}]
     },
     {
       "id": "kover",
       "name": "Ковёр",
       "zones": [
-        {"x": 0.278, "y": 0.861, "radius": 0.06},
-        {"x": 0.706, "y": 0.858, "radius": 0.06}
+        {"x": 0.258, "y": 0.866, "radiusX": 0.179, "radiusY": 0.152, "shape": "ellipse", "rotation": -79},
+        {"x": 0.731, "y": 0.877, "radiusX": 0.152, "radiusY": 0.204, "shape": "ellipse", "rotation": -31}
       ]
     },
     {
       "id": "skaterti",
       "name": "Скатерть",
       "zones": [
-        {"x": 0.509, "y": 0.932, "radius": 0.06},
-        {"x": 0.402, "y": 0.900, "radius": 0.06}
+        {"x": 0.529, "y": 0.866, "radiusX": 0.153, "radiusY": 0.121, "shape": "ellipse", "rotation": -23},
+        {"x": 0.403, "y": 0.793, "radiusX": 0.115, "radiusY": 0.087, "shape": "ellipse", "rotation": 0}
       ]
     },
     {
       "id": "batareja",
       "name": "Батарея",
-      "zones": [{"x": 0.701, "y": 0.616, "radius": 0.05}]
+      "zones": [{"x": 0.651, "y": 0.515, "width": 0.096, "height": 0.158, "shape": "rect", "rotation": 14}]
     },
     {
       "id": "stul",
       "name": "Стул",
-      "zones": [{"x": 0.644, "y": 0.578, "radius": 0.05}]
+      "zones": [
+        {"x": 0.594, "y": 0.535, "width": 0.072, "height": 0.107, "shape": "rect", "rotation": 8},
+        {"x": 0.369, "y": 0.885, "radiusX": 0.106, "radiusY": 0.173, "shape": "ellipse", "rotation": -36}
+      ]
     },
     {
       "id": "zanavestka",
       "name": "Занавеска",
       "zones": [
-        {"x": 0.666, "y": 0.203, "radius": 0.04},
-        {"x": 0.809, "y": 0.143, "radius": 0.04}
+        {"x": 0.642, "y": 0.088, "width": 0.049, "height": 0.374, "shape": "rect", "rotation": 5},
+        {"x": 0.79, "y": 0.094, "width": 0.059, "height": 0.293, "shape": "rect", "rotation": 0}
       ]
     },
     {
       "id": "korzina",
       "name": "Плетёная корзина",
       "zones": [
-        {"x": 0.234, "y": 0.719, "radius": 0.05},
-        {"x": 0.946, "y": 0.969, "radius": 0.05}
+        {"x": 0.232, "y": 0.647, "radiusX": 0.082, "radiusY": 0.058, "shape": "ellipse", "rotation": 85},
+        {"x": 0.973, "y": 0.871, "radiusX": 0.146, "radiusY": 0.095, "shape": "ellipse", "rotation": 28}
       ]
     },
     {
       "id": "samovar",
       "name": "Самовар",
-      "zones": [{"x": 0.844, "y": 0.254, "radius": 0.05}]
+      "zones": [{"x": 0.844, "y": 0.303, "radiusX": 0.077, "radiusY": 0.119, "shape": "ellipse", "rotation": 4}]
     },
     {
       "id": "radio",
       "name": "Радиоприёмник",
-      "zones": [{"x": 0.922, "y": 0.364, "radius": 0.04}]
+      "zones": [{"x": 0.876, "y": 0.335, "width": 0.111, "height": 0.106, "shape": "rect", "rotation": 3}]
     },
     {
       "id": "tsvetok",
       "name": "Цветок в горшке",
-      "zones": [{"x": 0.681, "y": 0.418, "radius": 0.04}]
+      "zones": [{"x": 0.713, "y": 0.433, "radiusX": 0.129, "radiusY": 0.063, "shape": "ellipse", "rotation": 13}]
     },
     {
       "id": "kuvsheen",
       "name": "Кувшин",
-      "zones": [{"x": 0.423, "y": 0.685, "radius": 0.04}]
+      "zones": [{"x": 0.393, "y": 0.588, "width": 0.05, "height": 0.116, "shape": "rect", "rotation": 0}]
     },
     {
       "id": "yabloki",
       "name": "Яблоки",
-      "zones": [{"x": 0.496, "y": 0.646, "radius": 0.05}]
+      "zones": [{"x": 0.499, "y": 0.634, "radiusX": 0.064, "radiusY": 0.042, "shape": "ellipse", "rotation": 0}]
     },
     {
       "id": "hleb",
       "name": "Хлеб",
-      "zones": [{"x": 0.638, "y": 0.696, "radius": 0.04}]
+      "zones": [{"x": 0.638, "y": 0.659, "radiusX": 0.045, "radiusY": 0.031, "shape": "ellipse", "rotation": 0}]
     },
     {
       "id": "miska",
       "name": "Миска с салатом",
-      "zones": [{"x": 0.548, "y": 0.408, "radius": 0.04}]
+      "zones": [{"x": 0.546, "y": 0.425, "radius": 0.035, "shape": "circle"}]
     },
     {
       "id": "varene",
       "name": "Банка варенья",
-      "zones": [{"x": 0.619, "y": 0.790, "radius": 0.03}]
+      "zones": [{"x": 0.615, "y": 0.728, "radiusX": 0.039, "radiusY": 0.055, "shape": "ellipse", "rotation": 0}]
     },
     {
       "id": "ogurtsy",
       "name": "Банка огурцов",
-      "zones": [{"x": 0.562, "y": 0.690, "radius": 0.03}]
+      "zones": [{"x": 0.562, "y": 0.661, "radiusX": 0.04, "radiusY": 0.05, "shape": "ellipse", "rotation": 0}]
     },
     {
       "id": "kastrulya",
       "name": "Кастрюля",
       "zones": [
-        {"x": 0.449, "y": 0.543, "radius": 0.04},
-        {"x": 0.505, "y": 0.531, "radius": 0.04},
-        {"x": 0.508, "y": 0.594, "radius": 0.04}
+        {"x": 0.455, "y": 0.533, "radiusX": 0.061, "radiusY": 0.05, "shape": "ellipse", "rotation": 0},
+        {"x": 0.5, "y": 0.52, "radiusX": 0.068, "radiusY": 0.05, "shape": "ellipse", "rotation": 0},
+        {"x": 0.505, "y": 0.589, "radiusX": 0.028, "radiusY": 0.06, "shape": "ellipse", "rotation": -83}
       ]
     },
     {
       "id": "polotentse",
       "name": "Полотенце",
-      "zones": [{"x": 0.233, "y": 0.344, "radius": 0.04}]
+      "zones": [{"x": 0.231, "y": 0.372, "radiusX": 0.041, "radiusY": 0.118, "shape": "ellipse", "rotation": -2}]
     },
     {
       "id": "yaytsa",
       "name": "Яйца",
-      "zones": [{"x": 0.539, "y": 0.770, "radius": 0.04}]
+      "zones": [{"x": 0.536, "y": 0.72, "radiusX": 0.049, "radiusY": 0.035, "shape": "ellipse", "rotation": 0}]
     },
     {
       "id": "lozhka",
       "name": "Ложка",
-      "zones": [{"x": 0.510, "y": 0.315, "radius": 0.03}]
+      "zones": [{"x": 0.486, "y": 0.297, "width": 0.061, "height": 0.093, "shape": "rect", "rotation": -3}]
     },
     {
       "id": "retsept",
       "name": "Рецепт",
-      "zones": [{"x": 0.632, "y": 0.186, "radius": 0.03}]
+      "zones": [{"x": 0.615, "y": 0.22, "width": 0.032, "height": 0.119, "shape": "rect", "rotation": 0}]
     },
     {
       "id": "protiven",
       "name": "Противень",
-      "zones": [{"x": 0.060, "y": 0.903, "radius": 0.06}]
+      "zones": [{"x": 0.033, "y": 0.769, "width": 0.06, "height": 0.135, "shape": "rect", "rotation": -26}]
     },
     {
       "id": "posuda",
       "name": "Фарфоровая тарелка",
       "zones": [
-        {"x": 0.324, "y": 0.351, "radius": 0.06},
-        {"x": 0.367, "y": 0.339, "radius": 0.06},
-        {"x": 0.323, "y": 0.212, "radius": 0.06},
-        {"x": 0.368, "y": 0.216, "radius": 0.06},
-        {"x": 0.325, "y": 0.096, "radius": 0.06},
-        {"x": 0.278, "y": 0.098, "radius": 0.06}
+        {"x": 0.329, "y": 0.372, "radius": 0.05, "shape": "circle"},
+        {"x": 0.373, "y": 0.369, "radius": 0.055, "shape": "circle"},
+        {"x": 0.321, "y": 0.272, "radius": 0.05, "shape": "circle"},
+        {"x": 0.368, "y": 0.269, "radius": 0.05, "shape": "circle"},
+        {"x": 0.328, "y": 0.179, "radius": 0.045, "shape": "circle"},
+        {"x": 0.283, "y": 0.188, "radiusX": 0.072, "radiusY": 0.035, "shape": "ellipse", "rotation": 0}
       ]
     },
     {
       "id": "luk",
       "name": "Связка лука",
       "zones": [
-        {"x": 0.052, "y": 0.058, "radius": 0.04},
-        {"x": 0.300, "y": 0.029, "radius": 0.04},
-        {"x": 0.399, "y": 0.048, "radius": 0.04},
-        {"x": 0.628, "y": 0.038, "radius": 0.04}
+        {"x": 0.051, "y": 0.105, "radiusX": 0.089, "radiusY": 0.109, "shape": "ellipse", "rotation": 0},
+        {"x": 0.301, "y": 0.078, "radiusX": 0.04, "radiusY": 0.075, "shape": "ellipse", "rotation": 0},
+        {"x": 0.396, "y": 0.107, "radius": 0.08, "shape": "circle"},
+        {"x": 0.626, "y": 0.117, "radius": 0.08, "shape": "circle"}
       ]
     }
   ],
   "bath_items": [
-    {"id": "pech_bath",       "name": "Печь",              "zones": [{"x": 0.06, "y": 0.25, "width": 0.18, "height": 0.55, "shape": "rect"}]},
-    {"id": "bochka",          "name": "Бочка с водой",     "zones": [{"x": 0.317, "y": 0.510, "radius": 0.20}]},
-    {"id": "vedro_bath",      "name": "Ведро",             "zones": [{"x": 0.322, "y": 0.733, "radius": 0.11}]},
-    {"id": "taz",             "name": "Таз",               "zones": [{"x": 0.523, "y": 0.460, "radius": 0.10}]},
+    {"id": "pech_bath",       "name": "Печь",              "zones": [{"x": 0.007, "y": 0.208, "width": 0.226, "height": 0.543, "shape": "rect", "rotation": -8}]},
+    {"id": "bochka",          "name": "Бочка с водой",     "zones": [{"x": 0.237, "y": 0.386, "width": 0.173, "height": 0.29, "shape": "rect", "rotation": -1}]},
+    {"id": "vedro_bath",      "name": "Ведро",             "zones": [{"x": 0.279, "y": 0.576, "width": 0.098, "height": 0.206, "shape": "rect", "rotation": 0}]},
+    {"id": "taz",             "name": "Таз",               "zones": [{"x": 0.534, "y": 0.47, "radiusX": 0.119, "radiusY": 0.064, "shape": "ellipse", "rotation": 1}]},
     {"id": "lavka",           "name": "Лавка",             "zones": [
-      {"x": 0.38, "y": 0.49, "width": 0.32, "height": 0.18, "shape": "rect", "rotation": 20},
-      {"x": 0.44, "y": 0.22, "width": 0.28, "height": 0.16, "shape": "rect", "rotation": 20}
+      {"x": 0.406, "y": 0.471, "width": 0.294, "height": 0.207, "shape": "rect", "rotation": 20},
+      {"x": 0.428, "y": 0.276, "width": 0.363, "height": 0.176, "shape": "rect", "rotation": 10}
     ]},
-    {"id": "okno_bath",       "name": "Окно",              "zones": [{"x": 0.29, "y": 0.06, "width": 0.11, "square": true, "shape": "rect"}]},
-    {"id": "dver_bath",       "name": "Дверь",             "zones": [{"x": 0.83, "y": 0.10, "width": 0.17, "height": 0.60, "shape": "rect"}]},
+    {"id": "okno_bath",       "name": "Окно",              "zones": [{"x": 0.29, "y": 0.12, "width": 0.104, "height": 0.206, "shape": "rect", "rotation": -3}]},
+    {"id": "dver_bath",       "name": "Дверь",             "zones": [{"x": 0.808, "y": 0.004, "width": 0.189, "height": 0.649, "shape": "rect", "rotation": 6}]},
     {"id": "venik",           "name": "Веник дубовый",     "zones": [
-      {"x": 0.217, "y": 0.950, "radius": 0.08},
-      {"x": 0.578, "y": 0.221, "radius": 0.07},
-      {"x": 0.724, "y": 0.077, "radius": 0.06},
-      {"x": 0.670, "y": 0.091, "radius": 0.06}
+      {"x": 0.215, "y": 0.878, "radiusX": 0.168, "radiusY": 0.105, "shape": "ellipse", "rotation": -18},
+      {"x": 0.574, "y": 0.289, "radiusX": 0.15, "radiusY": 0.06, "shape": "ellipse", "rotation": 0},
+      {"x": 0.745, "y": 0.16, "radiusX": 0.094, "radiusY": 0.102, "shape": "ellipse", "rotation": 0},
+      {"x": 0.68, "y": 0.16, "radiusX": 0.075, "radiusY": 0.106, "shape": "ellipse", "rotation": 0}
     ]},
-    {"id": "kvas",            "name": "Бутылка кваса",     "zones": [{"x": 0.295, "y": 0.175, "width": 0.04, "height": 0.12, "shape": "rect"}]},
+    {"id": "kvas",            "name": "Бутылка кваса",     "zones": [{"x": 0.293, "y": 0.203, "width": 0.031, "height": 0.134, "shape": "rect", "rotation": 0}]},
     {"id": "svecha",          "name": "Свеча",             "zones": [
-      {"x": 0.827, "y": 0.652, "radius": 0.03},
-      {"x": 0.333, "y": 0.221, "radius": 0.03}
+      {"x": 0.833, "y": 0.662, "radiusX": 0.063, "radiusY": 0.111, "shape": "ellipse", "rotation": 7},
+      {"x": 0.343, "y": 0.295, "radiusX": 0.025, "radiusY": 0.042, "shape": "ellipse", "rotation": 0}
     ]},
-    {"id": "banka_trav",      "name": "Банка с травами",   "zones": [{"x": 0.727, "y": 0.610, "width": 0.06, "height": 0.15, "shape": "rect"}]},
-    {"id": "chasy_bath",      "name": "Часы",              "zones": [{"x": 0.415, "y": 0.215, "radius": 0.04}]},
+    {"id": "banka_trav",      "name": "Банка с травами",   "zones": [{"x": 0.717, "y": 0.516, "width": 0.067, "height": 0.183, "shape": "rect", "rotation": 5}]},
+    {"id": "chasy_bath",      "name": "Часы",              "zones": [{"x": 0.405, "y": 0.283, "radius": 0.04, "shape": "circle"}]},
     {"id": "polotentse_bath", "name": "Полотенце",         "zones": [
-      {"x": 0.253, "y": 0.184, "radius": 0.07},
-      {"x": 0.685, "y": 0.324, "radius": 0.07},
-      {"x": 0.626, "y": 0.619, "radius": 0.07},
-      {"x": 0.461, "y": 0.936, "radius": 0.07}
+      {"x": 0.264, "y": 0.254, "radiusX": 0.052, "radiusY": 0.129, "shape": "ellipse", "rotation": -9},
+      {"x": 0.707, "y": 0.394, "radiusX": 0.092, "radiusY": 0.152, "shape": "ellipse", "rotation": 55},
+      {"x": 0.641, "y": 0.623, "radiusX": 0.121, "radiusY": 0.06, "shape": "ellipse", "rotation": 26},
+      {"x": 0.496, "y": 0.895, "radiusX": 0.15, "radiusY": 0.075, "shape": "ellipse", "rotation": 30}
     ]},
-    {"id": "termometr",       "name": "Термометр",         "zones": [{"x": 0.210, "y": 0.095, "width": 0.025, "height": 0.10, "shape": "rect"}]},
+    {"id": "termometr",       "name": "Термометр",         "zones": [{"x": 0.199, "y": 0.133, "width": 0.035, "height": 0.164, "shape": "rect", "rotation": -6}]},
     {"id": "kovsh",           "name": "Ковш",              "zones": [
-      {"x": 0.458, "y": 0.405, "radius": 0.05},
-      {"x": 0.950, "y": 0.399, "radius": 0.05}
+      {"x": 0.455, "y": 0.427, "radius": 0.05, "shape": "circle"},
+      {"x": 0.927, "y": 0.478, "radiusX": 0.029, "radiusY": 0.13, "shape": "ellipse", "rotation": 35}
     ]},
-    {"id": "mochalka",        "name": "Мочалка",           "zones": [{"x": 0.570, "y": 0.532, "radius": 0.04}]},
-    {"id": "nozhnicy",        "name": "Ножницы",           "zones": [{"x": 0.677, "y": 0.825, "radius": 0.03}]},
-    {"id": "rashoska",        "name": "Расчёска",          "zones": [{"x": 0.571, "y": 0.898, "radius": 0.03}]},
-    {"id": "pemza",           "name": "Пемза",             "zones": [{"x": 0.718, "y": 0.944, "radius": 0.04}]},
+    {"id": "mochalka",        "name": "Мочалка",           "zones": [{"x": 0.579, "y": 0.524, "radiusX": 0.064, "radiusY": 0.04, "shape": "ellipse", "rotation": -17}]},
+    {"id": "nozhnicy",        "name": "Ножницы",           "zones": [{"x": 0.681, "y": 0.747, "radiusX": 0.116, "radiusY": 0.033, "shape": "ellipse", "rotation": 19}]},
+    {"id": "rashoska",        "name": "Расчёска",          "zones": [{"x": 0.575, "y": 0.814, "radiusX": 0.108, "radiusY": 0.027, "shape": "ellipse", "rotation": 11}]},
+    {"id": "pemza",           "name": "Пемза",             "zones": [{"x": 0.73, "y": 0.852, "radiusX": 0.076, "radiusY": 0.04, "shape": "ellipse", "rotation": 37}]},
     {"id": "meshok",          "name": "Мешочек с травами", "zones": [
-      {"x": 0.633, "y": 0.953, "radius": 0.03},
-      {"x": 0.628, "y": 0.843, "radius": 0.03},
-      {"x": 0.921, "y": 0.872, "radius": 0.03}
+      {"x": 0.648, "y": 0.873, "radiusX": 0.074, "radiusY": 0.076, "shape": "ellipse", "rotation": 0},
+      {"x": 0.63, "y": 0.763, "radiusX": 0.066, "radiusY": 0.053, "shape": "ellipse", "rotation": 11},
+      {"x": 0.936, "y": 0.776, "radius": 0.08, "shape": "circle"}
     ]},
-    {"id": "spichki",         "name": "Спички",            "zones": [{"x": 0.892, "y": 0.971, "radius": 0.03}]},
-    {"id": "sol",             "name": "Соль",              "zones": [{"x": 0.800, "y": 0.908, "radius": 0.04}]},
-    {"id": "flacon",          "name": "Флакон масла",      "zones": [{"x": 0.867, "y": 0.855, "radius": 0.03}]},
-    {"id": "podushka",        "name": "Травяная подушка",  "zones": [{"x": 0.487, "y": 0.188, "radius": 0.04}]},
+    {"id": "spichki",         "name": "Спички",            "zones": [{"x": 0.86, "y": 0.846, "width": 0.077, "height": 0.096, "shape": "rect", "rotation": 22}]},
+    {"id": "sol",             "name": "Соль",              "zones": [{"x": 0.811, "y": 0.824, "radius": 0.065, "shape": "circle"}]},
+    {"id": "flacon",          "name": "Флакон масла",      "zones": [{"x": 0.879, "y": 0.76, "radiusX": 0.028, "radiusY": 0.067, "shape": "ellipse", "rotation": 9}]},
+    {"id": "podushka",        "name": "Травяная подушка",  "zones": [{"x": 0.5, "y": 0.268, "radiusX": 0.07, "radiusY": 0.046, "shape": "ellipse", "rotation": 0}]},
     {"id": "sliv",            "name": "Слив",              "zones": [
-      {"x": 0.410, "y": 0.897, "radius": 0.03},
-      {"x": 0.344, "y": 0.960, "radius": 0.03}
+      {"x": 0.448, "y": 0.808, "radiusX": 0.168, "radiusY": 0.053, "shape": "ellipse", "rotation": -24},
+      {"x": 0.358, "y": 0.883, "radiusX": 0.169, "radiusY": 0.055, "shape": "ellipse", "rotation": -21}
     ]},
     {"id": "kamni",           "name": "Камни для печки",   "zones": [
-      {"x": 0.136, "y": 0.106, "radius": 0.04},
-      {"x": 0.062, "y": 0.139, "radius": 0.04},
-      {"x": 0.008, "y": 0.144, "radius": 0.04}
+      {"x": 0.15, "y": 0.196, "radiusX": 0.051, "radiusY": 0.039, "shape": "ellipse", "rotation": 0},
+      {"x": 0.089, "y": 0.219, "radiusX": 0.093, "radiusY": 0.04, "shape": "ellipse", "rotation": 0},
+      {"x": 0.026, "y": 0.219, "radiusX": 0.057, "radiusY": 0.04, "shape": "ellipse", "rotation": 0}
     ]},
-    {"id": "mylo",            "name": "Мыло",              "zones": [{"x": 0.623, "y": 0.533, "radius": 0.03}]},
-    {"id": "banka_voda",      "name": "Банка с водой",     "zones": [{"x": 0.883, "y": 0.708, "radius": 0.04}]}
+    {"id": "mylo",            "name": "Мыло",              "zones": [{"x": 0.632, "y": 0.539, "radiusX": 0.066, "radiusY": 0.049, "shape": "ellipse", "rotation": 28}]},
+    {"id": "banka_voda",      "name": "Банка с водой",     "zones": [{"x": 0.893, "y": 0.648, "radiusX": 0.072, "radiusY": 0.1, "shape": "ellipse", "rotation": 11}]}
   ],
   "bath_levels": [
     {"id": 101, "timer": 420, "items": ["pech_bath", "bochka", "okno_bath", "dver_bath", "vedro_bath"]},
@@ -287,5 +290,18 @@
     {"id": 108, "timer": 210, "items": ["mylo", "nozhnicy", "rashoska", "pemza", "banka_trav", "lavka"]},
     {"id": 109, "timer": 180, "items": ["meshok", "spichki", "sol", "flacon", "mylo", "nozhnicy", "rashoska"]},
     {"id": 110, "timer": 150, "items": ["pemza", "meshok", "spichki", "sol", "flacon", "termometr", "sliv"]}
+  ],
+  "bedroom_items": [],
+  "bedroom_levels": [
+    {"id": 201, "timer": 420, "items": []},
+    {"id": 202, "timer": 400, "items": []},
+    {"id": 203, "timer": 360, "items": []},
+    {"id": 204, "timer": 330, "items": []},
+    {"id": 205, "timer": 300, "items": []},
+    {"id": 206, "timer": 270, "items": []},
+    {"id": 207, "timer": 240, "items": []},
+    {"id": 208, "timer": 210, "items": []},
+    {"id": 209, "timer": 180, "items": []},
+    {"id": 210, "timer": 150, "items": []}
   ]
 }
