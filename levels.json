@@ -7,7 +7,7 @@
     },
     {
       "id": 2,
-      "timer": 400,
+      "timer": 390,
       "items": ["skaterti", "batareja", "stul", "zanavestka", "korzina"]
     },
     {
@@ -42,12 +42,12 @@
     },
     {
       "id": 9,
-      "timer": 180,
+      "timer": 165,
       "items": ["retsept", "protiven", "posuda", "luk", "polotentse", "lozhka", "yaytsa"]
     },
     {
       "id": 10,
-      "timer": 150,
+      "timer": 120,
       "items": ["luk", "retsept", "protiven", "posuda", "polotentse", "lozhka", "miska"]
     }
   ],
@@ -281,27 +281,76 @@
   ],
   "bath_levels": [
     {"id": 101, "timer": 420, "items": ["pech_bath", "bochka", "okno_bath", "dver_bath", "vedro_bath"]},
-    {"id": 102, "timer": 400, "items": ["taz", "lavka", "venik", "polotentse_bath", "kvas"]},
+    {"id": 102, "timer": 390, "items": ["taz", "lavka", "venik", "polotentse_bath", "kvas"]},
     {"id": 103, "timer": 360, "items": ["chasy_bath", "termometr", "kovsh", "mochalka", "banka_trav"]},
     {"id": 104, "timer": 330, "items": ["svecha", "podushka", "kamni", "sliv", "banka_voda"]},
     {"id": 105, "timer": 300, "items": ["pech_bath", "bochka", "venik", "kovsh", "chasy_bath", "polotentse_bath"]},
     {"id": 106, "timer": 270, "items": ["mylo", "nozhnicy", "rashoska", "taz", "svecha", "kvas"]},
     {"id": 107, "timer": 240, "items": ["pemza", "meshok", "spichki", "sol", "flacon", "termometr"]},
     {"id": 108, "timer": 210, "items": ["mylo", "nozhnicy", "rashoska", "pemza", "banka_trav", "lavka"]},
-    {"id": 109, "timer": 180, "items": ["meshok", "spichki", "sol", "flacon", "mylo", "nozhnicy", "rashoska"]},
-    {"id": 110, "timer": 150, "items": ["pemza", "meshok", "spichki", "sol", "flacon", "termometr", "sliv"]}
+    {"id": 109, "timer": 165, "items": ["meshok", "spichki", "sol", "flacon", "mylo", "nozhnicy", "rashoska"]},
+    {"id": 110, "timer": 120, "items": ["pemza", "meshok", "spichki", "sol", "flacon", "termometr", "sliv"]}
   ],
-  "bedroom_items": [],
+  "bedroom_items": [
+    {"id": "krovat_bedroom",     "name": "Кровать",                 "zones": [{"x": -0.008, "y": 0.233, "width": 0.551, "height": 0.582, "shape": "rect", "rotation": 25}]},
+    {"id": "sunduk_bedroom",     "name": "Сундук",                  "zones": [{"x": 0.27, "y": 0.585, "width": 0.357, "height": 0.289, "shape": "rect", "rotation": -11}]},
+    {"id": "komod_bedroom",      "name": "Комод",                   "zones": [{"x": 0.653, "y": 0.369, "width": 0.255, "height": 0.327, "shape": "rect", "rotation": 0}]},
+    {"id": "zerkalo_bedroom",    "name": "Зеркало",                 "zones": [{"x": 0.779, "y": 0.047, "width": 0.141, "height": 0.296, "shape": "rect", "rotation": 7}]},
+    {"id": "okno_bedroom",       "name": "Окно",                    "zones": [{"x": 0.577, "y": 0.005, "width": 0.138, "height": 0.319, "shape": "rect", "rotation": 0}]},
+    {"id": "kover_bedroom",      "name": "Ковёр",                   "zones": [{"x": 0.329, "y": 0.757, "width": 0.468, "height": 0.291, "shape": "rect", "rotation": -16}]},
+    {"id": "lampa_bedroom",      "name": "Керосиновая лампа",       "zones": [{"x": 0.355, "y": 0.248, "radiusX": 0.035, "radiusY": 0.071, "shape": "ellipse", "rotation": 0}]},
+    {"id": "budilnik_bedroom",   "name": "Будильник",               "zones": [{"x": 0.32, "y": 0.29, "radius": 0.04, "shape": "circle"}]},
+    {"id": "shkatulka_bedroom",  "name": "Шкатулка синяя",          "zones": [{"x": 0.713, "y": 0.294, "width": 0.08, "height": 0.08, "shape": "rect", "rotation": 0}]},
+    {"id": "foto_bedroom",       "name": "Фотография в рамке",      "zones": [
+      {"x": 0.198, "y": 0.018, "width": 0.057, "height": 0.147, "shape": "rect", "rotation": 0},
+      {"x": 0.797, "y": 0.304, "width": 0.04, "height": 0.08, "shape": "rect", "rotation": 9}
+    ]},
+    {"id": "vaza_bedroom",       "name": "Ваза с цветами",          "zones": [{"x": 0.603, "y": 0.266, "radiusX": 0.063, "radiusY": 0.08, "shape": "ellipse", "rotation": 0}]},
+    {"id": "knigi_bedroom",      "name": "Стопка книг",             "zones": [
+      {"x": 0.377, "y": 0.539, "width": 0.098, "height": 0.087, "shape": "rect", "rotation": 0},
+      {"x": 0.766, "y": 0.714, "width": 0.125, "height": 0.127, "shape": "rect", "rotation": 1}
+    ]},
+    {"id": "korzina_bedroom",    "name": "Корзина с бельём",        "zones": [
+      {"x": 0.694, "y": 0.687, "radiusX": 0.151, "radiusY": 0.121, "shape": "ellipse", "rotation": 0},
+      {"x": 0.605, "y": 0.526, "radiusX": 0.081, "radiusY": 0.067, "shape": "ellipse", "rotation": 0}
+    ]},
+    {"id": "shlyapa_bedroom",    "name": "Соломенная шляпа",        "zones": [{"x": 0.499, "y": 0.089, "radius": 0.06, "shape": "circle"}]},
+    {"id": "kartina_bedroom",    "name": "Картина",                 "zones": [{"x": 0.059, "y": 0.019, "width": 0.123, "height": 0.145, "shape": "rect", "rotation": 0}]},
+    {"id": "sumka_bedroom",      "name": "Сумка",                   "zones": [{"x": 0.945, "y": 0.54, "radiusX": 0.073, "radiusY": 0.11, "shape": "ellipse", "rotation": 11}]},
+    {"id": "podsvechnik_bedroom","name": "Подсвечник",              "zones": [
+      {"x": 0.889, "y": 0.357, "radiusX": 0.035, "radiusY": 0.071, "shape": "ellipse", "rotation": 5},
+      {"x": 0.595, "y": 0.789, "radiusX": 0.045, "radiusY": 0.065, "shape": "ellipse", "rotation": 0}
+    ]},
+    {"id": "ochki_bedroom",      "name": "Очки",                    "zones": [{"x": 0.502, "y": 0.61, "radius": 0.04, "shape": "circle"}]},
+    {"id": "klubok_bedroom",     "name": "Клубок ниток",            "zones": [
+      {"x": 0.22, "y": 0.876, "radius": 0.05, "shape": "circle"},
+      {"x": 0.289, "y": 0.956, "radius": 0.045, "shape": "circle"},
+      {"x": 0.882, "y": 0.864, "radius": 0.04, "shape": "circle"}
+    ]},
+    {"id": "busy_bedroom",       "name": "Бусы",                    "zones": [{"x": 0.89, "y": 0.156, "radiusX": 0.074, "radiusY": 0.12, "shape": "ellipse", "rotation": 0}]},
+    {"id": "pisma_bedroom",      "name": "Письма",                  "zones": [{"x": 0.405, "y": 0.888, "radius": 0.095, "shape": "circle"}]},
+    {"id": "pugovicy_bedroom",   "name": "Пуговицы",                "zones": [{"x": 0.804, "y": 0.966, "radiusX": 0.055, "radiusY": 0.033, "shape": "ellipse", "rotation": 0}]},
+    {"id": "naperstok_bedroom",  "name": "Напёрсток",               "zones": [{"x": 0.731, "y": 0.95, "radius": 0.04, "shape": "circle"}]},
+    {"id": "tarelka_bedroom",    "name": "Декоративная тарелка",    "zones": [{"x": 0.034, "y": 0.105, "radius": 0.055, "shape": "circle"}]},
+    {"id": "platok_bedroom",     "name": "Платок",                  "zones": [{"x": 0.46, "y": 0.254, "radiusX": 0.088, "radiusY": 0.143, "shape": "ellipse", "rotation": 0}]},
+    {"id": "lavanda_bedroom",    "name": "Лаванда",                 "zones": [{"x": 0.938, "y": 0.188, "radiusX": 0.058, "radiusY": 0.116, "shape": "ellipse", "rotation": 8}]},
+    {"id": "podushki_bedroom",   "name": "Подушки",                 "zones": [{"x": 0.023, "y": 0.264, "width": 0.291, "height": 0.142, "shape": "rect", "rotation": -10}]},
+    {"id": "matreshka_bedroom",  "name": "Матрёшка",                "zones": [{"x": 0.374, "y": 0.077, "radiusX": 0.029, "radiusY": 0.035, "shape": "ellipse", "rotation": 0}]},
+    {"id": "zanaveski_bedroom",  "name": "Занавески",               "zones": [
+      {"x": 0.673, "y": -0.006, "width": 0.087, "height": 0.321, "shape": "rect", "rotation": -6},
+      {"x": 0.52, "y": -0.033, "width": 0.068, "height": 0.48, "shape": "rect", "rotation": 10}
+    ]}
+  ],
   "bedroom_levels": [
-    {"id": 201, "timer": 420, "items": []},
-    {"id": 202, "timer": 400, "items": []},
-    {"id": 203, "timer": 360, "items": []},
-    {"id": 204, "timer": 330, "items": []},
-    {"id": 205, "timer": 300, "items": []},
-    {"id": 206, "timer": 270, "items": []},
-    {"id": 207, "timer": 240, "items": []},
-    {"id": 208, "timer": 210, "items": []},
-    {"id": 209, "timer": 180, "items": []},
-    {"id": 210, "timer": 150, "items": []}
+    {"id": 201, "timer": 420, "items": ["krovat_bedroom", "sunduk_bedroom", "komod_bedroom", "zerkalo_bedroom", "okno_bedroom"]},
+    {"id": 202, "timer": 390, "items": ["kover_bedroom", "zanaveski_bedroom", "korzina_bedroom", "kartina_bedroom", "shlyapa_bedroom"]},
+    {"id": 203, "timer": 360, "items": ["lampa_bedroom", "budilnik_bedroom", "vaza_bedroom", "knigi_bedroom", "sumka_bedroom"]},
+    {"id": 204, "timer": 330, "items": ["shkatulka_bedroom", "foto_bedroom", "podsvechnik_bedroom", "matreshka_bedroom", "tarelka_bedroom"]},
+    {"id": 205, "timer": 300, "items": ["krovat_bedroom", "komod_bedroom", "lampa_bedroom", "budilnik_bedroom", "kartina_bedroom", "vaza_bedroom"]},
+    {"id": 206, "timer": 270, "items": ["ochki_bedroom", "klubok_bedroom", "busy_bedroom", "knigi_bedroom", "shkatulka_bedroom", "sunduk_bedroom"]},
+    {"id": 207, "timer": 240, "items": ["platok_bedroom", "lavanda_bedroom", "podushki_bedroom", "podsvechnik_bedroom", "shlyapa_bedroom", "matreshka_bedroom"]},
+    {"id": 208, "timer": 210, "items": ["pugovicy_bedroom", "naperstok_bedroom", "ochki_bedroom", "busy_bedroom", "tarelka_bedroom", "zanaveski_bedroom"]},
+    {"id": 209, "timer": 165, "items": ["klubok_bedroom", "pisma_bedroom", "pugovicy_bedroom", "naperstok_bedroom", "ochki_bedroom", "sumka_bedroom", "platok_bedroom"]},
+    {"id": 210, "timer": 120, "items": ["naperstok_bedroom", "pugovicy_bedroom", "pisma_bedroom", "klubok_bedroom", "busy_bedroom", "lavanda_bedroom", "tarelka_bedroom"]}
   ]
 }

@@ -1047,12 +1047,13 @@ html, body {
     background: url('assets/popup_victory.png.png') center/100% 100% no-repeat;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    gap: 10px;
+    gap: 4px;
     padding: 50px 40px 20px;
 }
 .result-title {
     font-family: 'Lobster', cursive;
     font-size: 32px; text-align: center; line-height: 1;
+    margin-top: 14px;
 }
 .result-title.win  { color: #5C3317; }
 .result-title.lose { color: #7a3a1a; }
@@ -1074,6 +1075,11 @@ html, body {
     font-size: 1.4rem; color: #5C3317; min-height: 28px;
 }
 .result-coin-icon { width: 28px; height: 28px; object-fit: contain; }
+.result-time-note {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem; color: #7a3a1a; opacity: 0.8;
+    text-align: center; min-height: 18px;
+}
 .result-reason {
     font-family: 'Lobster', cursive;
     font-size: 1rem; color: #7a3a1a; text-align: center;
@@ -1206,6 +1212,26 @@ html, body {
 .btn-novel-continue.hidden { display: none; }
 
 /* === Достижения === */
+.achievement-tabs {
+    position: relative; z-index: 10;
+    display: flex; gap: 8px;
+    width: 100%; max-width: 560px;
+    padding: 0 16px; margin-top: 10px;
+}
+.achievement-tab {
+    flex: 1;
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .85rem;
+    color: rgba(255,255,255,.6);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 12px;
+    padding: 8px 6px;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+.achievement-tab:hover  { background: rgba(255,255,255,.12); }
+.achievement-tab.active { background: rgba(255,215,0,.22); border-color: rgba(255,215,0,.6); color: #FFE4A0; }
+
 .achievements-list {
     position: relative; z-index: 10;
     width: 100%; max-width: 560px;
@@ -1213,20 +1239,87 @@ html, body {
     display: flex; flex-direction: column; gap: 10px;
 }
 .achievement-card {
-    background: rgba(255,255,255,.07); border-radius: 14px;
+    background: rgba(255,255,255,.05); border-radius: 14px;
     padding: 14px 18px; display: flex; align-items: center; gap: 14px;
-    border: 1px solid rgba(255,255,255,.1);
+    border: 2px solid rgba(255,255,255,.18);
     transition: background var(--ease);
 }
+.achievement-card.locked { opacity: 0.75; }
 .achievement-card.unlocked {
-    background: rgba(123,174,127,.18);
-    border-color: rgba(123,174,127,.45);
+    background: rgba(255,215,0,.1);
+    border-color: #FFD700;
+    box-shadow: 0 0 12px rgba(255,215,0,.25);
 }
 .achievement-icon { font-size: 1.9rem; width: 44px; text-align: center; flex-shrink: 0; }
 .achievement-info { flex: 1; }
 .achievement-name { font-size: .95rem; font-weight: 800; color: var(--cream); }
 .achievement-desc { font-size: .8rem; color: rgba(255,255,255,.55); margin-top: 3px; }
-.achievement-progress { font-size: .78rem; color: var(--gold); margin-top: 4px; font-weight: 700; }
+.achievement-check { font-size: 1.3rem; flex-shrink: 0; }
+
+.achievement-bar-track {
+    width: 100%; height: 8px; margin-top: 6px;
+    background: rgba(0,0,0,.35); border-radius: 6px; overflow: hidden;
+}
+.achievement-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    border-radius: 6px;
+    transition: width .5s ease;
+}
+.achievement-bar-label {
+    font-size: .74rem; font-weight: 700; color: var(--gold);
+    margin-top: 3px;
+}
+
+/* === Тост достижения === */
+.achievement-toast {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  width: 300px;
+  background: linear-gradient(135deg, #FFF8F0 0%, #F5E6C8 100%);
+  border: 3px solid #FFD700;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 0 20px rgba(255,215,0,0.6), 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideInRight 0.4s ease-out, fadeOutToast 0.4s ease-in 3.6s forwards;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOutToast {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(120%); }
+}
+
+.achievement-toast-icon {
+  font-size: 36px;
+}
+
+.achievement-toast-text {
+  flex: 1;
+}
+
+.achievement-toast-title {
+  font-family: 'Lobster', cursive;
+  font-size: 12px;
+  color: #C4623A;
+  margin-bottom: 2px;
+}
+
+.achievement-toast-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #5C3317;
+}
 
 /* === Настройки (деревенский стиль) === */
 #screen-settings { justify-content: center; }
@@ -1658,6 +1751,142 @@ html, body {
 .btn-coins-img:hover  { transform: scale(1.05) rotate(5deg);  filter: drop-shadow(0 10px 24px rgba(196,98,58,.75)); }
 .btn-coins-img:active { transform: scale(0.95) rotate(5deg); }
 
+/* === Виджет прогресса звёзд === */
+.stars-progress {
+  position: fixed;
+  bottom: 340px;
+  left: 24px;
+  width: 70px;
+  height: 320px;
+  background: linear-gradient(180deg, #6B4423 0%, #4A2E15 100%);
+  border: 3px solid #3D2000;
+  border-radius: 20px;
+  padding: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  z-index: 20;
+}
+
+.stars-progress-track {
+  width: 40px;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stars-progress-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+  border-radius: 14px;
+  transition: height 0.8s ease-out;
+  box-shadow: 0 0 12px rgba(255,215,0,0.6);
+}
+
+.stars-progress-marker {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stars-progress-marker span {
+  font-size: 9px;
+  color: #FFF8F0;
+  background: #4A2E15;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.stars-progress-marker.flash { animation: markerFlash 1s ease-out; }
+@keyframes markerFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.9); }
+  50%  { box-shadow: 0 0 18px 8px rgba(255,255,255,0.9); }
+  100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+}
+
+.stars-progress-gift {
+  width: 44px;
+  height: 44px;
+  background: radial-gradient(circle, #FFD700 0%, #C4623A 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 6px;
+  box-shadow: 0 0 15px rgba(255,215,0,0.8);
+  animation: pulse-gift 1.5s infinite;
+}
+
+@keyframes pulse-gift {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.stars-progress-count {
+  font-family: 'Lobster', cursive;
+  font-size: 13px;
+  color: #FFF8F0;
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* Попап награды за отметку (20/50 звёзд) */
+#stars-milestone-popup, #stars-cycle-popup {
+    position: fixed; inset: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+}
+#stars-milestone-popup.hidden, #stars-cycle-popup.hidden { display: none; }
+.stars-milestone-bg, .stars-cycle-bg {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.75);
+}
+.stars-milestone-card {
+    position: relative; z-index: 1;
+    width: 400px; height: 267px;
+    background: url('assets/popup_found.png.png') center/100% 100% no-repeat;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; padding: 20px 40px; box-sizing: border-box;
+    animation: starsPopIn 0.4s ease-out;
+}
+.stars-milestone-title {
+    font-family: 'Lobster', cursive; font-size: 22px; color: #8B4513; text-align: center;
+    margin-top: 16px;
+}
+.stars-milestone-btn { margin-top: 2px; }
+.stars-milestone-rewards {
+    font-family: 'Lobster', cursive; font-size: 19px; color: #5C3317; text-align: center; line-height: 1.5;
+}
+
+.stars-cycle-card {
+    position: relative; z-index: 1;
+    width: 500px; height: 333px;
+    background: url('assets/popup_victory.png.png') center/100% 100% no-repeat;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; padding: 50px 40px 20px; box-sizing: border-box;
+    animation: starsPopIn 0.5s ease-out;
+}
+.stars-cycle-title {
+    font-family: 'Lobster', cursive; font-size: 28px; color: #5C3317; text-align: center;
+}
+.stars-cycle-rewards {
+    font-family: 'Lobster', cursive; font-size: 16px; color: #5C3317; text-align: center; line-height: 1.4;
+}
+.stars-cycle-btn { margin-top: 4px; }
+
+@keyframes starsPopIn {
+    0%   { opacity: 0; transform: scale(0.7); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
 /* === Кнопка ежедневной награды === */
 .daily-btn-wrap {
     position: absolute;
@@ -1975,6 +2204,20 @@ html, body {
 #tutorial-next-btn:hover  { transform: scale(1.06); box-shadow: 0 6px 20px rgba(196,98,58,0.75); }
 #tutorial-next-btn:active { transform: scale(0.95); }
 
+#tutorial-skip-btn {
+    position: absolute;
+    top: -14px; right: 14px;
+    background: rgba(0,0,0,0.55);
+    color: rgba(255,255,255,0.65);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    padding: 5px 14px;
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.78rem;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+#tutorial-skip-btn:hover { color: #fff; background: rgba(0,0,0,0.8); }
+
 /* Элемент, поднятый над оверлеем (502 > 500) но ниже панели (510) */
 .tut-raised { z-index: 502 !important; }
 
@@ -2169,3 +2412,30 @@ html, body {
 @media (orientation: landscape) and (max-height: 500px) {
     .main-title { font-size: 2.2rem; }
 }
+
+/* === Видео-вставка перед первым уровнем главы === */
+#intro-video {
+    position: fixed; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    background: #000;
+    z-index: 9999;
+}
+#intro-video.hidden { display: none; }
+
+#skip-video-btn {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    z-index: 10000;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem;
+    color: #fff;
+    background: rgba(0,0,0,0.55);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 22px;
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+#skip-video-btn:hover  { background: rgba(0,0,0,0.8); transform: scale(1.05); }
+#skip-video-btn:active { transform: scale(0.95); }
+#skip-video-btn.hidden { display: none; }

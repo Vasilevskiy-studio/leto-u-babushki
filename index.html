@@ -63,6 +63,14 @@
         <img id="btn-coins" src="assets/button_coins.png.png?v=1" class="btn-coins-img"
              onclick="Game.showCoinsModal()" alt="Получить монеты">
     </div>
+    <!-- Виджет прогресса звёзд -->
+    <div class="stars-progress" id="stars-progress">
+        <div class="stars-progress-count" id="stars-progress-count">0/100 ⭐</div>
+        <div class="stars-progress-track" id="stars-progress-track">
+            <div class="stars-progress-fill" id="stars-progress-fill" style="height:0%"></div>
+        </div>
+        <div class="stars-progress-gift">🎁</div>
+    </div>
     <!-- Кнопка Ежедневная награда -->
     <div class="daily-btn-wrap">
         <div class="daily-dot hidden" id="daily-dot"></div>
@@ -187,6 +195,7 @@
     <div class="result-container">
         <div id="result-title"  class="result-title"></div>
         <div id="result-stars"  class="result-stars"></div>
+        <div id="result-time-note" class="result-time-note"></div>
         <div id="result-coins"  class="result-coins"></div>
         <div id="result-reason" class="result-reason"></div>
         <div class="result-buttons">
@@ -328,6 +337,11 @@
         <h2 class="screen-title">🏆 Достижения</h2>
         <div style="width:80px"></div>
     </div>
+    <div id="achievement-tabs" class="achievement-tabs">
+        <button class="achievement-tab active" data-filter="all" onclick="Game.setAchievementFilter('all')">Все</button>
+        <button class="achievement-tab" data-filter="done" onclick="Game.setAchievementFilter('done')">Получено</button>
+        <button class="achievement-tab" data-filter="progress" onclick="Game.setAchievementFilter('progress')">В процессе</button>
+    </div>
     <div id="achievements-list" class="achievements-list"></div>
 </div>
 
@@ -335,6 +349,7 @@
 <div id="tutorial-overlay" class="hidden"></div>
 <div id="tutorial-frame"></div>
 <div id="tutorial-panel">
+  <button id="tutorial-skip-btn" onclick="Tutorial.skip()">Пропустить обучение ✕</button>
   <p id="tutorial-text"></p>
   <button id="tutorial-next-btn" onclick="Tutorial.next()">Далее ▶</button>
 </div>
@@ -419,6 +434,32 @@
     </div>
     <div id="photo-award-album-hint"></div>
 </div>
+
+<!-- === Награда за отметку прогресса звёзд === -->
+<div id="stars-milestone-popup" class="hidden">
+    <div class="stars-milestone-bg" onclick="StarsProgress.closeMilestonePopup()"></div>
+    <div class="stars-milestone-card">
+        <div class="stars-milestone-title">🎉 Награда за <span id="stars-milestone-at"></span> звёзд!</div>
+        <div id="stars-milestone-rewards" class="stars-milestone-rewards"></div>
+        <button class="btn btn-primary stars-milestone-btn" onclick="StarsProgress.closeMilestonePopup()">Забрать!</button>
+    </div>
+</div>
+
+<!-- === Завершение цикла звёзд === -->
+<div id="stars-cycle-popup" class="hidden">
+    <div class="stars-cycle-bg"></div>
+    <div class="stars-cycle-card">
+        <div class="stars-cycle-title">🏆 Цикл завершён!</div>
+        <div id="stars-cycle-rewards" class="stars-cycle-rewards"></div>
+        <button class="btn btn-primary stars-cycle-btn" onclick="StarsProgress.closeCyclePopup()">Ура!</button>
+    </div>
+</div>
+
+<!-- === Видео-вставка перед первым уровнем главы === -->
+<video id="intro-video" class="hidden" muted playsinline>
+    <source src="" type="video/mp4">
+</video>
+<button id="skip-video-btn" class="hidden">Пропустить →</button>
 
 <script src="game.js"></script>
 </body>

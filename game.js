@@ -99,6 +99,12 @@ const STORY_KEYS = {
     210: 'bedroom_after_10'
 };
 
+// Видео-вставки перед первым уровнем главы (показываются один раз)
+const INTRO_VIDEOS = {
+    1:   { key: 'intro_kitchen', file: 'video_intro_kitchen.mp4.mp4' },
+    101: { key: 'intro_bath',    file: 'video_intro_bath.mp4.mp4' }
+};
+
 // Нативное соотношение сторон фоновой картинки уровня (1672×941)
 const LEVEL_BG_AR = 1672 / 941;
 
@@ -123,19 +129,105 @@ function imageRect(area) {
 }
 
 // Достижения
-const ACHIEVEMENTS = [
-    { id: 'first_step', name: 'Первый шаг',         icon: '👣', desc: 'Пройти 1 уровень',                    check: s => completedCount(s) >= 1  },
-    { id: 'helper',     name: 'Помощник бабушки',   icon: '🤝', desc: 'Пройти 5 уровней',                    check: s => completedCount(s) >= 5  },
-    { id: 'detective',  name: 'Настоящий сыщик',    icon: '🔍', desc: 'Пройти 10 уровней',                   check: s => completedCount(s) >= 10 },
-    { id: 'careful',    name: 'Аккуратный',          icon: '✨', desc: 'Пройти уровень без единой ошибки',    check: s => s.achievements.careful === true },
-    { id: 'eagle_eye',  name: 'Глазастый',           icon: '👁️', desc: 'Найти суммарно 50 предметов',
-        progress: s => `${Math.min(s.stats.totalFound, 50)}/50`,
-        check: s => s.stats.totalFound >= 50 }
-];
-
 function completedCount(s) {
     return Object.values(s.levels).filter(l => l.completed).length;
 }
+
+// Id уровней главы: kitchen 1-10, bath 101-110, bedroom 201-210
+function levelIdsFor(chapter) {
+    const offset = chapter === 'bath' ? 100 : chapter === 'bedroom' ? 200 : 0;
+    return Array.from({ length: 10 }, (_, i) => i + 1 + offset);
+}
+function chapterPerfect(s, chapter) {
+    return levelIdsFor(chapter).every(id => (s.levels[id] || {}).stars === 3);
+}
+function chapterNoHints(s, chapter) {
+    return levelIdsFor(chapter).every(id => {
+        const l = s.levels[id] || {};
+        return l.completed && l.noHints === true;
+    });
+}
+// Альбом задуман на 10 глав (3 существуют сейчас, 7 планируются) — 100% пока
+// недостижимо и это ожидаемо, ачивка «догонит» игру по мере выхода новых глав.
+function albumPercent(s) {
+    const ch = s.chapters || {};
+    const done = ['kitchen', 'bath', 'bedroom'].filter(c => ch[c] && ch[c].completed).length;
+    return done / 10;
+}
+
+const ACHIEVEMENTS = [
+    { id: 'first_step', name: 'Первый шаг', desc: 'Пройти 1 уровень', icon: '👣',
+        check: s => completedCount(s) >= 1 },
+    { id: 'helper', name: 'Помощник бабушки', desc: 'Пройти 5 уровней', icon: '🧡',
+        check: s => completedCount(s) >= 5 },
+    { id: 'detective', name: 'Настоящий сыщик', desc: 'Пройти 10 уровней', icon: '🔍',
+        check: s => completedCount(s) >= 10 },
+    { id: 'accurate', name: 'Аккуратный', desc: 'Пройти уровень без единой ошибки', icon: '✨',
+        check: s => s.stats.hadPerfectRun === true },
+    { id: 'eagle_eye', name: 'Глазастый', desc: 'Найти суммарно 50 предметов', icon: '👁',
+        target: 50, progress: s => Math.min(s.stats.totalFound, 50),
+        check: s => s.stats.totalFound >= 50 },
+
+    { id: 'stars_20', name: 'Звёздочка', desc: 'Собрать суммарно 20 звёзд', icon: '⭐',
+        target: 20, progress: s => Math.min(s.stats.lifetimeStars, 20),
+        check: s => s.stats.lifetimeStars >= 20 },
+    { id: 'stars_50', name: 'Звездопад', desc: 'Собрать суммарно 50 звёзд', icon: '🌟',
+        target: 50, progress: s => Math.min(s.stats.lifetimeStars, 50),
+        check: s => s.stats.lifetimeStars >= 50 },
+    { id: 'stars_100', name: 'Созвездие', desc: 'Собрать суммарно 100 звёзд', icon: '💫',
+        target: 100, progress: s => Math.min(s.stats.lifetimeStars, 100),
+        check: s => s.stats.lifetimeStars >= 100 },
+    { id: 'stars_200', name: 'Млечный путь', desc: 'Собрать суммарно 200 звёзд', icon: '🌌',
+        target: 200, progress: s => Math.min(s.stats.lifetimeStars, 200),
+        check: s => s.stats.lifetimeStars >= 200 },
+
+    { id: 'perfect_kitchen', name: 'Идеальная кухня', desc: 'Пройти главу Кухня на максимум (30 звёзд)', icon: '🍳',
+        check: s => chapterPerfect(s, 'kitchen') },
+    { id: 'perfect_bath', name: 'Идеальная баня', desc: 'Пройти главу Баня на максимум (30 звёзд)', icon: '♨️',
+        check: s => chapterPerfect(s, 'bath') },
+    { id: 'perfect_bedroom', name: 'Идеальная спальня', desc: 'Пройти главу Спальня на максимум (30 звёзд)', icon: '🛏️',
+        check: s => chapterPerfect(s, 'bedroom') },
+    { id: 'streak_3', name: 'На волне', desc: 'Пройти 3 уровня подряд на 3 звезды', icon: '🔥',
+        check: s => (s.stats.starStreak || 0) >= 3 },
+
+    { id: 'album_50', name: 'Собиратель воспоминаний', desc: 'Собрать 50% фотоальбома', icon: '📷',
+        check: s => albumPercent(s) >= 0.5 },
+    { id: 'album_100', name: 'Полный альбом', desc: 'Собрать 100% фотоальбома', icon: '📸',
+        check: s => albumPercent(s) >= 1 },
+    { id: 'murzik_first', name: 'Новый друг', desc: 'Открыть кота Мурзика впервые', icon: '🐱',
+        check: s => s.stats.murzikBought === true },
+
+    { id: 'quick_finder', name: 'Молниеносный', desc: 'Найти предмет за 2 секунды после начала уровня', icon: '⚡',
+        check: s => s.stats.hadQuickFind === true },
+    { id: 'no_hints_chapter', name: 'Без подсказок', desc: 'Пройти целую главу без единой подсказки', icon: '🚫',
+        check: s => chapterNoHints(s, 'kitchen') || chapterNoHints(s, 'bath') || chapterNoHints(s, 'bedroom') },
+    { id: 'found_500', name: 'Опытный искатель', desc: 'Найти суммарно 500 предметов', icon: '🔎',
+        target: 500, progress: s => Math.min(s.stats.totalFound, 500),
+        check: s => s.stats.totalFound >= 500 },
+    { id: 'found_1000', name: 'Мастер поиска', desc: 'Найти суммарно 1000 предметов', icon: '🏅',
+        target: 1000, progress: s => Math.min(s.stats.totalFound, 1000),
+        check: s => s.stats.totalFound >= 1000 },
+
+    { id: 'coins_1000', name: 'Копилка', desc: 'Накопить 1000 монет одновременно', icon: '💰',
+        check: s => s.coins >= 1000 },
+    { id: 'spent_100_malina', name: 'Транжира', desc: 'Потратить 100 малины в магазине', icon: '🍓',
+        check: s => (s.stats.malinaSpent || 0) >= 100 },
+    { id: 'bought_murzik', name: 'Хозяин кота', desc: 'Купить Мурзика хотя бы раз', icon: '🎀',
+        check: s => s.stats.murzikBought === true },
+
+    { id: 'streak_3days', name: 'Постоянный гость', desc: 'Заходить в игру 3 дня подряд', icon: '📅',
+        check: s => (s.stats.loginStreak || 0) >= 3 },
+    { id: 'streak_7days', name: 'Верный друг', desc: 'Заходить в игру 7 дней подряд', icon: '🗓️',
+        check: s => (s.stats.loginStreak || 0) >= 7 },
+    { id: 'daily_30', name: 'Завсегдатай', desc: 'Получить ежедневную награду 30 раз', icon: '🎁',
+        target: 30, progress: s => Math.min(s.stats.dailyClaims || 0, 30),
+        check: s => (s.stats.dailyClaims || 0) >= 30 },
+
+    { id: 'story_first', name: 'Начало истории', desc: 'Пройти первую сюжетную вставку', icon: '📖',
+        check: s => Object.values(s.novel_shown || {}).some(v => v === true) },
+    { id: 'story_kitchen_done', name: 'Секреты кухни', desc: 'Досмотреть все диалоги главы Кухня', icon: '🗝️',
+        check: s => !!(s.novel_shown && s.novel_shown.after_3 && s.novel_shown.after_6 && s.novel_shown.after_10) }
+];
 
 // =============================================
 // СОХРАНЕНИЕ
@@ -147,9 +239,16 @@ function defaultSave() {
         energy:       { current: 8, lastUpdate: Date.now() },
         hints:        { used: 0, lastReset: Date.now(), extra: 0 },
         achievements: {},
-        stats:        { totalFound: 0 },
+        stats:        {
+            totalFound: 0, lifetimeStars: 0, starStreak: 0,
+            dailyClaims: 0, loginStreak: 0, lastLoginDate: '',
+            murzikBought: false, malinaSpent: 0,
+            hadPerfectRun: false, hadQuickFind: false
+        },
         settings:     { sound: true, music: true },
-        murzik:       { active: false, expires: 0 }
+        murzik:       { active: false, expires: 0 },
+        starsProgress:{ cycle: 1, totalStars: 0, levelBest: {}, claimedMilestones: [] },
+        videosShown:  {}
     };
 }
 
@@ -178,6 +277,23 @@ function persist() {
 }
 
 let save = loadSave();
+
+// Серия ежедневных заходов — считается по календарным датам (локальное время),
+// не по фактам получения ежедневной награды. Сбрасывается при пропуске дня.
+(function updateLoginStreak() {
+    const d = new Date();
+    const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+    const today = fmt(d);
+    if (save.stats.lastLoginDate === today) return; // уже засчитан сегодняшний вход
+
+    const yesterday = new Date(d);
+    yesterday.setDate(d.getDate() - 1);
+    save.stats.loginStreak = save.stats.lastLoginDate === fmt(yesterday)
+        ? (save.stats.loginStreak || 0) + 1
+        : 1;
+    save.stats.lastLoginDate = today;
+    persist();
+})();
 
 // =============================================
 // ЭНЕРГИЯ
@@ -286,6 +402,9 @@ function updateHUD() {
 }
 
 setInterval(updateHUD, 1000);
+// Подстраховка: реальное время обновления прогресс-ачивок даже для событий,
+// не вызывающих checkAchievements() явно (например, дев-панель).
+setInterval(() => { if (typeof Game !== 'undefined') Game.checkAchievements(); }, 1000);
 
 // =============================================
 // ИГРОВОЕ СОСТОЯНИЕ
@@ -297,6 +416,7 @@ let gs            = {};
 let currentChapter = 'kitchen';
 let storyQ       = { scenes: [], idx: 0 };
 let devMode      = false;
+let _achFilter   = 'all';
 
 // =============================================
 // GAME
@@ -315,7 +435,7 @@ const Game = {
         if (id !== 'screen-main' && typeof Profile !== 'undefined') Profile.hidePanel();
     },
 
-    showMain()         { this.stopTimer(); this.showScreen('screen-main'); updateHUD(); Profile.showPanel(); },
+    showMain()         { this.stopTimer(); this.showScreen('screen-main'); updateHUD(); Profile.showPanel(); StarsProgress.render(); },
     showAchievements() { this.showScreen('screen-achievements'); this.renderAchievements(); },
     showSettings()     { this.showScreen('screen-settings');     this.updateSettingsUI(); },
     showShop()         { this.showScreen('screen-shop');         Shop.init(); updateHUD(); },
@@ -558,6 +678,7 @@ const Game = {
                          })),
             timerHandle: null,
             hintActive:  false,
+            hintUsed:    false,
             perfectRun:  true,
             startTime:   Date.now()
         };
@@ -578,8 +699,51 @@ const Game = {
 
         this.showScreen('screen-game');
         this.renderGame();
-        this.startTimer();
-        updateHUD();
+
+        const intro = INTRO_VIDEOS[levelId];
+        if (intro && !(save.videosShown || {})[intro.key]) {
+            this._playIntroVideo(intro);
+        } else {
+            this.startTimer();
+            updateHUD();
+        }
+    },
+
+    // Полноэкранное видео перед первым уровнем главы. Таймер и отсчёт
+    // ачивок (напр. «Молниеносный») стартуют только после видео/пропуска —
+    // gs.startTime намеренно переустанавливается в finish().
+    _playIntroVideo(intro) {
+        const video  = document.getElementById('intro-video');
+        const skip   = document.getElementById('skip-video-btn');
+        const source = video.querySelector('source');
+        if (!video || !skip) { this.startTimer(); updateHUD(); return; }
+
+        source.src = `assets/${intro.file}`;
+        video.load();
+
+        const finish = () => {
+            video.removeEventListener('ended', finish);
+            skip.removeEventListener('click', finish);
+            video.pause();
+            video.classList.add('hidden');
+            skip.classList.add('hidden');
+
+            if (!save.videosShown) save.videosShown = {};
+            save.videosShown[intro.key] = true;
+            persist();
+
+            gs.startTime = Date.now(); // реальный старт игры — после видео
+            this.startTimer();
+            updateHUD();
+        };
+
+        video.addEventListener('ended', finish, { once: true });
+        skip.addEventListener('click', finish, { once: true });
+
+        video.classList.remove('hidden');
+        skip.classList.remove('hidden');
+        video.currentTime = 0;
+        video.play().catch(finish); // если автоплей заблокирован — сразу пропускаем
     },
 
     // ----- Рендер игрового экрана -----
@@ -738,6 +902,11 @@ const Game = {
         item.found = true;
         gs.found++;
 
+        // Достижение «Молниеносный» — предмет найден в первые 2 секунды уровня.
+        // Флаг сырого факта отдельно от achievements[id] — иначе checkAchievements()
+        // не заметит переход false→true и тост не покажется.
+        if (Date.now() - gs.startTime <= 2000) save.stats.hadQuickFind = true;
+
         // Помечаем все зоны предмета (их может быть несколько при coords[])
         const points = (item.coords && item.coords.length) ? item.coords : [{}];
         points.forEach((_, i) => {
@@ -758,6 +927,7 @@ const Game = {
         this.refreshFound();
         save.stats.totalFound++;
         persist();
+        this.checkAchievements(); // прогресс-ачивки (найдено предметов) в реальном времени
 
         if (gs.found >= gs.total) {
             this.stopTimer(); // гасим НЕМЕДЛЕННО, до задержки
@@ -849,18 +1019,29 @@ const Game = {
 
     winLevel() {
         this.stopTimer();
-        const elapsed = (Date.now() - gs.startTime) / 1000;
-        const stars   = elapsed < 180 ? 3 : gs.perfectRun ? 2 : 1;
 
-        const prev = save.levels[currentLevel.id] || { stars: 0, completed: false };
-        save.levels[currentLevel.id] = { stars: Math.max(prev.stars, stars), completed: true };
+        // Универсальная формула звёзд: только процент потраченного времени
+        // от общего времени уровня, одинаково для любой главы и любого уровня.
+        const totalTime    = currentLevel.timer || 420;
+        const timeSpent     = totalTime - gs.timeLeft;
+        const percentSpent = timeSpent / totalTime;
+        const stars = percentSpent <= 0.30 ? 3 : percentSpent <= 0.50 ? 2 : 1;
 
-        const coins = [0, 10, 15, 20][stars];
+        const prev = save.levels[currentLevel.id] || { stars: 0, completed: false, noHints: false };
+        // noHints — лучший достигнутый результат: раз пройдено без подсказки, флаг не откатываем
+        const noHints = !!prev.noHints || !gs.hintUsed;
+        save.levels[currentLevel.id] = { stars: Math.max(prev.stars, stars), completed: true, noHints };
+
+        // Серия побед подряд на 3 звезды (для ачивки «На волне»)
+        save.stats.starStreak = stars === 3 ? (save.stats.starStreak || 0) + 1 : 0;
+
+        const coins = [0, 3, 5, 10][stars];
         save.coins += coins;
-        if (gs.perfectRun && !save.achievements.careful) save.achievements.careful = true;
+        if (gs.perfectRun) save.stats.hadPerfectRun = true;
         persist();
         this.checkAchievements();
-        this.showResult(true, stars, coins, '');
+        StarsProgress.award(currentLevel.id, stars);
+        this.showResult(true, stars, coins, '', percentSpent);
     },
 
     loseLevel(reason) {
@@ -870,13 +1051,22 @@ const Game = {
 
     // ----- Результат -----
 
-    showResult(win, stars, coins, reason) {
+    showResult(win, stars, coins, reason, percentSpent) {
         this.showScreen('screen-result');
         updateHUD();
 
         document.getElementById('result-title').textContent = win ? 'Уровень пройден!' : 'Не получилось...';
         document.getElementById('result-title').className   = 'result-title ' + (win ? 'win' : 'lose');
         document.getElementById('result-reason').textContent = win ? '' : reason;
+
+        // Наглядно показываем, за какой процент времени пройден уровень —
+        // это и есть причина, по которой начислено именно столько звёзд.
+        const timeNoteEl = document.getElementById('result-time-note');
+        if (timeNoteEl) {
+            timeNoteEl.textContent = win && typeof percentSpent === 'number'
+                ? `Использовано ${Math.round(percentSpent * 100)}% времени`
+                : '';
+        }
 
         const btnNext = document.getElementById('btn-next');
         if (btnNext) btnNext.style.display = win ? '' : 'none';
@@ -959,6 +1149,7 @@ const Game = {
                 if (!save.novel_shown) save.novel_shown = {};
                 save.novel_shown[key] = true;
                 persist();
+                this.checkAchievements();
                 storyQ = { scenes: STORY_SCENES[id], idx: 0 };
                 this.showStory();
                 return;
@@ -1039,6 +1230,7 @@ const Game = {
 
         const target = unfound[Math.floor(Math.random() * unfound.length)];
         gs.hintActive = true;
+        gs.hintUsed   = true;
 
         const hLeft = document.getElementById('hints-left');
         const hBtn  = document.getElementById('hint-btn');
@@ -1059,29 +1251,65 @@ const Game = {
     checkAchievements() {
         let updated = false;
         ACHIEVEMENTS.forEach(ach => {
-            if (!save.achievements[ach.id] && ach.check(save)) { save.achievements[ach.id] = true; updated = true; }
+            if (!save.achievements[ach.id] && ach.check(save)) {
+                save.achievements[ach.id] = true;
+                updated = true;
+                AchievementToast.enqueue(ach);
+            }
         });
-        if (updated) persist();
+        if (updated) {
+            persist();
+            const screen = document.getElementById('screen-achievements');
+            if (screen && screen.classList.contains('active')) this.renderAchievements();
+        }
+    },
+
+    setAchievementFilter(filter) {
+        _achFilter = filter;
+        this.renderAchievements();
     },
 
     renderAchievements() {
+        const tabs = document.getElementById('achievement-tabs');
+        if (tabs) {
+            tabs.querySelectorAll('.achievement-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === _achFilter);
+            });
+        }
+
         const list = document.getElementById('achievements-list');
         list.innerHTML = '';
-        ACHIEVEMENTS.forEach(ach => {
-            const done = !!save.achievements[ach.id];
-            const card = document.createElement('div');
-            card.className = `achievement-card${done ? ' unlocked' : ''}`;
-            const prog = ach.progress ? `<div class="achievement-progress">${ach.progress(save)}</div>` : '';
-            card.innerHTML = `
-                <div class="achievement-icon">${done ? ach.icon : '🔒'}</div>
-                <div class="achievement-info">
-                    <div class="achievement-name">${ach.name}</div>
-                    <div class="achievement-desc">${ach.desc}</div>
-                    ${prog}
-                </div>
-                <div style="font-size:1.3rem">${done ? '✅' : ''}</div>`;
-            list.appendChild(card);
-        });
+        ACHIEVEMENTS
+            .filter(ach => {
+                const done = !!save.achievements[ach.id];
+                if (_achFilter === 'done')     return done;
+                if (_achFilter === 'progress') return !done;
+                return true;
+            })
+            .forEach(ach => {
+                const done = !!save.achievements[ach.id];
+                const card = document.createElement('div');
+                card.className = `achievement-card ${done ? 'unlocked' : 'locked'}`;
+
+                let progHTML = '';
+                if (ach.target) {
+                    const cur = Math.min(ach.progress(save), ach.target);
+                    const pct = Math.min(100, (cur / ach.target) * 100);
+                    progHTML = `
+                        <div class="achievement-bar-track"><div class="achievement-bar-fill" style="width:${pct}%"></div></div>
+                        <div class="achievement-bar-label">${cur}/${ach.target}</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="achievement-icon">${done ? ach.icon : '🔒'}</div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">${ach.name}</div>
+                        <div class="achievement-desc">${ach.desc}</div>
+                        ${progHTML}
+                    </div>
+                    <div class="achievement-check">${done ? '✅' : ''}</div>`;
+                list.appendChild(card);
+            });
     },
 
     // ----- Настройки -----
@@ -1280,7 +1508,10 @@ const Shop = (() => {
             }
 
             if (item.currency === 'coins')  save.coins  -= item.price;
-            if (item.currency === 'malina') save.malina -= item.price;
+            if (item.currency === 'malina') {
+                save.malina -= item.price;
+                save.stats.malinaSpent = (save.stats.malinaSpent || 0) + item.price;
+            }
 
             const iconEl = document.getElementById(`si-${item.id}`);
 
@@ -1297,7 +1528,10 @@ const Shop = (() => {
                     if (save.energy.current >= ENERGY_MAX) {
                         notify('Энергия уже полная или заряжена выше!', 'info');
                         if (item.currency === 'coins')  save.coins  += item.price;
-                        if (item.currency === 'malina') save.malina += item.price;
+                        if (item.currency === 'malina') {
+                            save.malina += item.price;
+                            save.stats.malinaSpent = Math.max(0, (save.stats.malinaSpent || 0) - item.price);
+                        }
                         updateHUD(); return;
                     }
                     save.energy.current = ENERGY_MAX;
@@ -1312,12 +1546,14 @@ const Shop = (() => {
                 const now = Date.now();
                 const base = (save.murzik && save.murzik.expires > now) ? save.murzik.expires : now;
                 save.murzik = { active: true, expires: base + item.days * 86400000 };
+                save.stats.murzikBought = true;
                 if (iconEl) _fly(item.icon, iconEl);
                 notify(`Мурзик активен ${item.days} дн.!`, 'success');
             }
 
             persist();
             updateHUD();
+            Game.checkAchievements();
             renderCards();
         },
 
@@ -1585,6 +1821,10 @@ const Tutorial = {
             return;
         }
         this._go();
+    },
+
+    skip() {
+        this.complete();
     },
 
     complete() {
@@ -1926,8 +2166,10 @@ const DailyReward = {
             case 'hints':  save.hints.used = Math.max(0, save.hints.used - amount); break;
             case 'malina': save.malina = (save.malina || 0) + amount; break;
         }
+        save.stats.dailyClaims = (save.stats.dailyClaims || 0) + 1;
         persist();
         updateHUD();
+        Game.checkAchievements();
 
         data.lastClaim  = Date.now();
         data.streak     = (data.streak || 0) + 1;
@@ -1952,6 +2194,217 @@ const DailyReward = {
             el.classList.remove('visible');
             setTimeout(() => el.remove(), 400);
         }, 2600);
+    }
+};
+
+// =============================================
+// ПРОГРЕСС ЗВЁЗД (виджет на главном экране)
+// =============================================
+
+// Конфигурация циклов: цель, промежуточные отметки с наградами и финальная награда.
+// Циклы за пределами описанных продолжают прогрессию (target = cycle*100).
+const STARS_CYCLES = {
+    1: {
+        target: 100,
+        milestones: [
+            { at: 20, reward: { malina: 5, energy: 2 } },
+            { at: 50, reward: { malina: 50, energy: 3 } }
+        ],
+        finalReward: { malina: 100, coins: 1000, energyFull: true, murzikDays: 10 }
+    },
+    2: {
+        target: 200,
+        milestones: [],
+        finalReward: { malina: 200, coins: 2000, energyFull: true }
+    }
+};
+
+function starsCycleConfig(cycle) {
+    if (STARS_CYCLES[cycle]) return STARS_CYCLES[cycle];
+    return { target: cycle * 100, milestones: [], finalReward: { malina: cycle * 100, coins: cycle * 1000, energyFull: true } };
+}
+
+function starsRewardText(reward) {
+    const parts = [];
+    if (reward.malina)     parts.push(`+${reward.malina} 🍓`);
+    if (reward.coins)      parts.push(`+${reward.coins} 🪙`);
+    if (reward.energy)     parts.push(`+${reward.energy} ⚡`);
+    if (reward.energyFull) parts.push('Полная энергия ⚡');
+    if (reward.murzikDays) parts.push(`Мурзик ${reward.murzikDays} дн. 🐱`);
+    return parts.join('<br>');
+}
+
+// =============================================
+// ТОСТЫ ДОСТИЖЕНИЙ
+// =============================================
+// Показываются строго по очереди (спец. позиция в правом верхнем углу не
+// поддерживает несколько одновременных тостов) с паузой 0.5s между ними.
+
+const AchievementToast = {
+    _queue: [],
+    _busy: false,
+
+    enqueue(ach) {
+        this._queue.push(ach);
+        this._processNext();
+    },
+
+    _processNext() {
+        if (this._busy || !this._queue.length) return;
+        this._busy = true;
+        const ach = this._queue.shift();
+
+        const el = document.createElement('div');
+        el.className = 'achievement-toast';
+        el.innerHTML =
+            `<div class="achievement-toast-icon">${ach.icon}</div>` +
+            `<div class="achievement-toast-text">` +
+                `<div class="achievement-toast-title">🏆 Достижение получено!</div>` +
+                `<div class="achievement-toast-name">${ach.name}</div>` +
+            `</div>`;
+        document.body.appendChild(el);
+
+        // Время жизни тоста задано анимацией в CSS (slideIn + fadeOut = 4s)
+        setTimeout(() => {
+            el.remove();
+            this._busy = false;
+            setTimeout(() => this._processNext(), 500);
+        }, 4000);
+    }
+};
+
+const StarsProgress = {
+    // Начисляет звёзды за уровень: только положительную разницу с лучшим
+    // результатом этого уровня. Если результат не лучше — ничего не даёт.
+    award(levelId, stars) {
+        const sp = save.starsProgress;
+        const prevBest = sp.levelBest[levelId] || 0;
+        if (stars <= prevBest) return;
+
+        const diff = stars - prevBest;
+        sp.levelBest[levelId] = stars;
+        const prevTotal = sp.totalStars;
+        sp.totalStars += diff;
+        save.stats.lifetimeStars = (save.stats.lifetimeStars || 0) + diff; // не сбрасывается циклами
+        persist();
+        Game.checkAchievements();
+
+        this.render();
+        this._checkMilestones(prevTotal, sp.totalStars);
+    },
+
+    _grantReward(reward) {
+        if (reward.malina) save.malina = (save.malina || 0) + reward.malina;
+        if (reward.coins)  save.coins += reward.coins;
+        if (reward.energy) save.energy.current += reward.energy; // сверхзаряд разрешён
+        if (reward.energyFull) {
+            syncEnergy();
+            if (save.energy.current < ENERGY_MAX) save.energy.current = ENERGY_MAX;
+        }
+        if (reward.murzikDays) {
+            const now = Date.now();
+            const base = (save.murzik && save.murzik.expires > now) ? save.murzik.expires : now;
+            save.murzik = { active: true, expires: base + reward.murzikDays * 86400000 };
+        }
+        persist();
+        updateHUD();
+    },
+
+    _checkMilestones(prevTotal, newTotal) {
+        const sp  = save.starsProgress;
+        const cfg = starsCycleConfig(sp.cycle);
+        if (!sp.claimedMilestones) sp.claimedMilestones = [];
+
+        // Явный список забранных отметок текущего цикла — отметка не
+        // показывается повторно даже после перезагрузки страницы.
+        cfg.milestones.forEach(m => {
+            if (newTotal >= m.at && !sp.claimedMilestones.includes(m.at)) {
+                sp.claimedMilestones.push(m.at);
+                this._grantReward(m.reward);
+                persist();
+                this._showMilestonePopup(m.at, m.reward);
+                this._flashMarker(m.at);
+            }
+        });
+
+        if (prevTotal < cfg.target && newTotal >= cfg.target) {
+            this._grantReward(cfg.finalReward);
+            this._showCyclePopup(sp.cycle, cfg.finalReward);
+            sp.cycle += 1;
+            sp.totalStars = 0;
+            sp.claimedMilestones = [];
+            persist();
+            this.render();
+        }
+    },
+
+    _showMilestonePopup(at, reward) {
+        const popup = document.getElementById('stars-milestone-popup');
+        if (!popup) return;
+        document.getElementById('stars-milestone-at').textContent = at;
+        const lines = [];
+        if (reward.malina) lines.push(`🍓 +${reward.malina} малины`);
+        if (reward.energy) lines.push(`⚡ +${reward.energy} энергии`);
+        document.getElementById('stars-milestone-rewards').innerHTML = lines.join('<br>');
+        popup.classList.remove('hidden');
+    },
+
+    closeMilestonePopup() {
+        const popup = document.getElementById('stars-milestone-popup');
+        if (popup) popup.classList.add('hidden');
+    },
+
+    _showCyclePopup(cycle, reward) {
+        const popup = document.getElementById('stars-cycle-popup');
+        if (!popup) return;
+        document.getElementById('stars-cycle-rewards').innerHTML =
+            `Цикл ${cycle} пройден!<br>${starsRewardText(reward)}`;
+        popup.classList.remove('hidden');
+    },
+
+    closeCyclePopup() {
+        const popup = document.getElementById('stars-cycle-popup');
+        if (popup) popup.classList.add('hidden');
+    },
+
+    _flashMarker(at) {
+        const el = document.querySelector(`.stars-progress-marker[data-at="${at}"]`);
+        if (!el) return;
+        el.classList.remove('flash');
+        void el.offsetWidth;
+        el.classList.add('flash');
+    },
+
+    // Перерисовывает шкалу и метки под текущий цикл (вызывать при смене цикла)
+    _renderMarkers(cfg) {
+        const track = document.getElementById('stars-progress-track');
+        if (!track) return;
+        track.querySelectorAll('.stars-progress-marker').forEach(el => el.remove());
+        cfg.milestones.forEach(m => {
+            const marker = document.createElement('div');
+            marker.className = 'stars-progress-marker';
+            marker.dataset.at = m.at;
+            marker.style.bottom = (m.at / cfg.target * 100) + '%';
+            marker.innerHTML = `<span>${m.at}</span>`;
+            track.appendChild(marker);
+        });
+    },
+
+    render() {
+        const sp  = save.starsProgress;
+        const cfg = starsCycleConfig(sp.cycle);
+
+        const fill = document.getElementById('stars-progress-fill');
+        if (fill) fill.style.height = Math.min(100, (sp.totalStars / cfg.target) * 100) + '%';
+
+        const countEl = document.getElementById('stars-progress-count');
+        if (countEl) countEl.textContent = `${sp.totalStars}/${cfg.target} ⭐`;
+
+        const track = document.getElementById('stars-progress-track');
+        if (track && track.dataset.cycle != sp.cycle) {
+            track.dataset.cycle = sp.cycle;
+            this._renderMarkers(cfg);
+        }
     }
 };
 
