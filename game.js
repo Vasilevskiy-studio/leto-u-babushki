@@ -11,6 +11,74 @@ const HINTS_PER_DAY   = 3;
 const HINTS_RESET_MS  = 24 * 60 * 60 * 1000;
 const HINT_DURATION   = 3000;
 
+// =============================================
+// МАСШТАБИРОВАНИЕ (единый контейнер #game-root, виртуальный холст 1920×1080)
+// =============================================
+// GAME_SCALE — текущий коэффициент масштаба; нужен везде, где пиксельные
+// координаты мыши/тача (реальные, из getBoundingClientRect/clientX) сверяются
+// с виртуальными (clientWidth и производные от него) — см. imageRect(),
+// handleClick(), ZoneEditor и т.д. Все эти места делят реальную дельту
+// на GAME_SCALE, приводя её к виртуальному пространству 1920×1080.
+let GAME_SCALE = 1;
+
+function scaleGame() {
+    const scaleX = window.innerWidth  / 1920;
+    const scaleY = window.innerHeight / 1080;
+    const scale  = Math.min(scaleX, scaleY);
+    // Окно ещё не готово (0×0 в момент старта скрипта в некоторых webview/
+    // preview-обёртках) — не залипаем на scale(0), дождёмся ближайшего resize
+    if (!scale || !isFinite(scale)) return;
+
+    GAME_SCALE = scale;
+    const root = document.getElementById('game-root');
+    if (root) root.style.transform = `translate(-50%, -50%) scale(${GAME_SCALE})`;
+}
+
+// Переводит РЕАЛЬНЫЙ (viewport-relative) DOMRect произвольного элемента
+// в виртуальные координаты #game-root (1920×1080) — нужно везде, где
+// position:fixed/absolute элемент внутри #game-root подстраивается под
+// getBoundingClientRect() другого элемента (у него теперь другой containing
+// block из-за transform на #game-root, а не сам viewport).
+function toRootRect(domRect) {
+    const root = document.getElementById('game-root');
+    const r = root ? root.getBoundingClientRect() : { left: 0, top: 0 };
+    return {
+        left:   (domRect.left - r.left) / GAME_SCALE,
+        top:    (domRect.top  - r.top)  / GAME_SCALE,
+        width:  domRect.width  / GAME_SCALE,
+        height: domRect.height / GAME_SCALE
+    };
+}
+
+function checkOrientation() {
+    const overlay = document.getElementById('rotate-overlay');
+    if (!overlay) return;
+    overlay.style.display = window.innerHeight > window.innerWidth ? 'flex' : 'none';
+}
+
+window.addEventListener('resize', scaleGame);
+window.addEventListener('orientationchange', scaleGame);
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', checkOrientation);
+scaleGame();
+checkOrientation();
+// Подстраховка: в некоторых webview/preview-обёртках innerWidth/innerHeight
+// в момент выполнения скрипта ещё 0 — пересчитываем после полной загрузки
+// и на следующем кадре отрисовки.
+window.addEventListener('load', scaleGame);
+requestAnimationFrame(scaleGame);
+
+// Программная блокировка ориентации — поддерживается не везде (не работает
+// в iOS Safari), поэтому оверлей #rotate-overlay остаётся основным решением.
+if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock('landscape').catch(() => {});
+}
+
+// Устройство с тач-вводом — увеличиваем зоны попадания кликов (не визуально,
+// только зону регистрации), т.к. пальцем целиться сложнее, чем курсором.
+const IS_TOUCH_DEVICE = 'ontouchstart' in window;
+const TOUCH_HIT_SCALE = IS_TOUCH_DEVICE ? 1.2 : 1;
+
 // Эмодзи предметов (для карточки нахождения)
 const ITEM_EMOJIS = {
     samovar:    '🫖',
@@ -774,8 +842,16 @@ const Game = {
 
         this.renderItems();
 
+        // touchstart реагирует мгновенно (без задержки синтетического click на
+        // мобильных браузерах); флаг lastTouchTs гасит последующий click по
+        // тому же тапу, чтобы предмет не засчитывался/не промахивался дважды
         const area = document.getElementById('game-area');
-        area.onclick = e => this.handleClick(e);
+        let lastTouchTs = 0;
+        area.ontouchstart = e => { lastTouchTs = Date.now(); this.handleClick(e); };
+        area.onclick = e => {
+            if (Date.now() - lastTouchTs < 500) return;
+            this.handleClick(e);
+        };
     },
 
     // Пустые невидимые div-зоны на игровом поле — никакого текста и иконок
@@ -815,10 +891,15 @@ const Game = {
     // ----- Обработка кликов -----
 
     handleClick(e) {
+        // Клик и тап дают точку в РЕАЛЬНЫХ (viewport) пикселях; #game-area
+        // отрисован внутри #game-root со масштабом GAME_SCALE, поэтому делим
+        // на масштаб, чтобы получить координаты в виртуальном пространстве
+        // 1920×1080 — том же, в котором заданы зоны предметов (imageRect()).
+        const point  = e.touches ? (e.changedTouches[0] || e.touches[0]) : e;
         const area   = document.getElementById('game-area');
         const rect   = area.getBoundingClientRect();
-        const px     = e.clientX - rect.left;   // относительно game-area — для визуальных эффектов
-        const py     = e.clientY - rect.top;
+        const px     = (point.clientX - rect.left) / GAME_SCALE; // относительно game-area — для визуальных эффектов
+        const py     = (point.clientY - rect.top)  / GAME_SCALE;
 
         // Блокируем клики во время туториала
         if (Tutorial && Tutorial.active) return;
@@ -870,7 +951,9 @@ const Game = {
                         const cos = Math.cos(a), sin = Math.sin(a);
                         [lx, ly] = [lx * cos - ly * sin, lx * sin + ly * cos];
                     }
-                    inside = Math.abs(lx) <= rw / 2 && Math.abs(ly) <= rh / 2;
+                    // TOUCH_HIT_SCALE увеличивает только допуск попадания (на тач-устройствах),
+                    // визуальный размер зоны (rw/rh) и приоритет (size) не затрагивает
+                    inside = Math.abs(lx) <= (rw * TOUCH_HIT_SCALE) / 2 && Math.abs(ly) <= (rh * TOUCH_HIT_SCALE) / 2;
                     size = (rw / IW) * (rh / IH);
                 } else if (zone.radiusX) {
                     // Овал: radiusX / radiusY — полуоси в долях minDim, rotation в градусах
@@ -881,14 +964,14 @@ const Game = {
                         const cos = Math.cos(a), sin = Math.sin(a);
                         [dx, dy] = [dx * cos - dy * sin, dx * sin + dy * cos];
                     }
-                    const erx = zone.radiusX * minDim;
-                    const ery = zone.radiusY * minDim;
+                    const erx = zone.radiusX * minDim * TOUCH_HIT_SCALE;
+                    const ery = zone.radiusY * minDim * TOUCH_HIT_SCALE;
                     inside = (dx * dx) / (erx * erx) + (dy * dy) / (ery * ery) <= 1;
                     size = zone.radiusX * zone.radiusY;
                 } else {
                     const dx = ix - zone.x * IW;
                     const dy = iy - zone.y * IH;
-                    inside = Math.sqrt(dx * dx + dy * dy) <= zone.radius * minDim;
+                    inside = Math.sqrt(dx * dx + dy * dy) <= zone.radius * minDim * TOUCH_HIT_SCALE;
                     size = zone.radius * zone.radius; // π сокращается при сравнении
                 }
                 if (inside && size < hitSize) { hit = it; hitSize = size; break; }
@@ -1766,7 +1849,9 @@ const Tutorial = {
         const frame = document.getElementById('tutorial-frame');
         const target = cfg.frameSel ? document.querySelector(cfg.frameSel) : null;
         if (target) {
-            const r = target.getBoundingClientRect();
+            // toRootRect: #tutorial-frame — position:fixed внутри #game-root,
+            // его containing block теперь виртуальный холст, а не viewport
+            const r = toRootRect(target.getBoundingClientRect());
             const p = 8;
             frame.style.left    = (r.left   - p) + 'px';
             frame.style.top     = (r.top    - p) + 'px';
@@ -1895,9 +1980,11 @@ document.addEventListener('mousemove', e => {
     if (!area) return;
     const rect = area.getBoundingClientRect();
     const img  = imageRect(area);
-    // Координаты в долях КАРТИНКИ (0..1), а не всего экрана
-    const rx = (((e.clientX - rect.left) - img.left) / img.width ).toFixed(3);
-    const ry = (((e.clientY - rect.top)  - img.top)  / img.height).toFixed(3);
+    // Координаты в долях КАРТИНКИ (0..1), а не всего экрана.
+    // (e.clientX - rect.left) — реальные (масштабированные) px, делим на
+    // GAME_SCALE, чтобы привести к тому же виртуальному пространству, что и img.
+    const rx = (((e.clientX - rect.left) / GAME_SCALE - img.left) / img.width ).toFixed(3);
+    const ry = (((e.clientY - rect.top)  / GAME_SCALE - img.top)  / img.height).toFixed(3);
     const xEl = document.getElementById('dev-x');
     const yEl = document.getElementById('dev-y');
     if (xEl) xEl.textContent = `x: ${rx}`;
@@ -2675,9 +2762,10 @@ const DevTools = {
         const area   = document.getElementById('game-area');
         if (!canvas || !area) { if (cb) cb.checked = false; return; }
 
-        const rect = area.getBoundingClientRect();
-        canvas.width  = rect.width;
-        canvas.height = rect.height;
+        // clientWidth/clientHeight — виртуальные (не зависят от масштаба #game-root),
+        // ровно то же пространство, в котором считает imageRect() ниже
+        canvas.width  = area.clientWidth;
+        canvas.height = area.clientHeight;
         canvas.style.display = 'block';
 
         const ctx = canvas.getContext('2d');
@@ -2877,8 +2965,9 @@ const ZoneEditor = {
             en.el.classList.add('dragging');
             const onMove = ev => {
                 if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) > 3) moved = true;
-                en.zone.x = +(zx + (ev.clientX - sx) / W).toFixed(3);
-                en.zone.y = +(zy + (ev.clientY - sy) / H).toFixed(3);
+                // clientX/clientY реальные (масштабированные) px — делим на GAME_SCALE
+                en.zone.x = +(zx + (ev.clientX - sx) / GAME_SCALE / W).toFixed(3);
+                en.zone.y = +(zy + (ev.clientY - sy) / GAME_SCALE / H).toFixed(3);
                 this._place(en);
                 if (this.selectedEl === en.el) this._showInfo(en);
             };
@@ -2910,9 +2999,11 @@ const ZoneEditor = {
         }, { passive: false });
     },
 
-    // Смещение мыши в локальных осях зоны (с учётом её поворота)
+    // Смещение мыши в локальных осях зоны (с учётом её поворота).
+    // clientX/clientY реальные (масштабированные) px — делим на GAME_SCALE,
+    // чтобы получить дельту в том же виртуальном пространстве, что и зоны.
     _localDelta(ev, sx, sy, rot) {
-        const dx = ev.clientX - sx, dy = ev.clientY - sy;
+        const dx = (ev.clientX - sx) / GAME_SCALE, dy = (ev.clientY - sy) / GAME_SCALE;
         if (!rot) return { dx, dy };
         const a = -rot * Math.PI / 180;
         const cos = Math.cos(a), sin = Math.sin(a);
@@ -3004,8 +3095,10 @@ const ZoneEditor = {
             },
             (ev, sx, sy, s) => {
                 const d = this._dims(en.zone);
-                // Переводим мышь из координат game-area в координаты картинки
-                const mx = ev.clientX - s.ar.left - d.offX, my = ev.clientY - s.ar.top - d.offY;
+                // Переводим мышь из координат game-area в координаты картинки:
+                // (ev.clientX - s.ar.left) реальные px → делим на GAME_SCALE → виртуальные
+                const mx = (ev.clientX - s.ar.left) / GAME_SCALE - d.offX;
+                const my = (ev.clientY - s.ar.top)  / GAME_SCALE - d.offY;
                 let ang = Math.atan2(my - d.cy, mx - d.cx) * 180 / Math.PI + 90;
                 en.zone.rotation = this._normDeg(Math.round(ang));
                 this._place(en);

@@ -13,6 +13,10 @@
 </head>
 <body>
 
+<!-- Единый масштабируемый контейнер — виртуальный холст 1920×1080,
+     весь игровой UI живёт внутри и масштабируется как единое целое. -->
+<div id="game-root">
+
 <!-- ===== ЭКРАН 1: Главный ===== -->
 <div id="screen-main" class="screen active">
     <div class="main-bg"></div>
@@ -460,6 +464,15 @@
     <source src="" type="video/mp4">
 </video>
 <button id="skip-video-btn" class="hidden">Пропустить →</button>
+
+</div><!-- /#game-root -->
+
+<!-- === Заглушка "поверни телефон" — вне масштабируемого контейнера,
+     всегда на весь реальный экран независимо от масштаба игры === -->
+<div id="rotate-overlay">
+    <div id="rotate-icon">📱</div>
+    <p id="rotate-text">Поверните телефон для игры</p>
+</div>
 
 <script src="game.js"></script>
 </body>
